@@ -1,35 +1,40 @@
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 
 public class StartScreen extends StackPane{
 	
-	private Image backgroundImage;
+	private BackgroundImage backgroundImage;
 	private Button playGame;
-	private Canvas canvas;
 	
-	public StartScreen () {
-		canvas = new Canvas();
+	public StartScreen (int width, int height) {
+		this.setWidth(width);
+		this.setHeight(height);
 		playGame = new Button("Play Game");
-		this.getChildren().addAll(playGame, canvas);
-		canvas.widthProperty().bind(this.widthProperty());
-		canvas.heightProperty().bind(this.heightProperty());
-		backgroundImage = new Image("file:images/backgroundImg.png");
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		drawImage(gc);
+        backgroundImage = new BackgroundImage(
+                new Image("file:images/backgroundImg.png"),
+                BackgroundRepeat.REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT
+        );
+        this.setBackground(new Background(backgroundImage));
+		this.getChildren().addAll(playGame);
 	}
 	
 	public void setEventHandlers() {
+		playGame.setOnAction((e)->{
+			// implement observable, 
+			// setViewTo(loginPanel);
 		
+		});
 	}
 	
-	private void drawImage(GraphicsContext g) {
-		int mid1 = this.widthProperty().intValue();
-		int mid2 = this.heightProperty().intValue();
-		
-		g.drawImage(backgroundImage, 0,mid1,0,mid2);
-		
-	}
 }
