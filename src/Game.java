@@ -8,42 +8,51 @@ public abstract class Game {
 	private int numSets;
 	private int setSize;
 	private int matchSize;
+	private Theme theme;
 	private List<Card> cards = new ArrayList<>();
 	private List<Card> curGuesses = new ArrayList<>();
-	private int numClicked = 0; // num of guesses for cur set
+	private int numClicked = 0;
 	private int setsFound = 0;
 	private int totalGuesses = 0;
-	public enum state{
-		ALREADY_FACE_UP,NOT_ENOUGH_CARDS,NOT_A_MATCH,MATCH,END_OF_GAME
+
+	public enum state {
+		ALREADY_FACE_UP, NOT_ENOUGH_CARDS, NOT_A_MATCH, MATCH, END_OF_GAME
 	}
 
-	public Game(int r, int c, int ss, int m) {
-		rows = r;
-		cols = c;
+	public Game(int r, int c, int ss, int m, Theme t) {
+		// CHANGE LATER
+		rows = 3;
+		cols = 4;
 		setSize = ss;
 		matchSize = m;
+		theme = t;
 		numSets = rows * cols / setSize;
-		setupGame();
+		newGame();
 	}
 
-	public void setupGame() {
-		List<String> cardIdentifiers = getCardIdentifiers(numSets);
-		for (String id : cardIdentifiers) {
+	public void newGame() {
+		numClicked = 0;
+		setsFound = 0;
+		totalGuesses = 0;
+		//List<String> cardIdentifiers = getCardIdentifiers(numSets);
+		List<String> cardFaces = theme.getImageStrings(numSets);
+		for (String id : cardFaces) {
 			for (int i = 0; i < setSize; i++) {
 				cards.add(new Card(id));
 			}
 		}
 		Collections.shuffle(cards);
 	}
-
+/*
 	private List<String> getCardIdentifiers(int pairCount) {
 		List<String> identifiers = new ArrayList<>();
+		theme.getImages(numSets);
 		for (int i = 1; i <= pairCount; i++) {
 			identifiers.add(String.valueOf(i));
 		}
 		return identifiers;
 	}
-
+*/
 	public Card getCard(int r, int c) {
 		return cards.get(r * cols + c);
 	}
@@ -60,14 +69,18 @@ public abstract class Game {
 			if (numClicked < matchSize) {
 				return state.NOT_ENOUGH_CARDS;
 			} else {
-				boolean f = checkGuesses();
-				numClicked = 0;
-				curGuesses.clear();
-				if (!f) {
+				if (!checkGuesses()) {
+					numClicked = 0;
+					for (Card card : curGuesses) {
+						card.flipCard();
+					}
+					curGuesses.clear();
 					return state.NOT_A_MATCH;
 				} else {
+					numClicked = 0;
+					curGuesses.clear();
 					setsFound++;
-					if(setsFound < numSets) {
+					if (setsFound < numSets) {
 						return state.MATCH;
 					} else {
 						return state.END_OF_GAME;
@@ -100,7 +113,7 @@ public abstract class Game {
 	public boolean isGameOver() {
 		return numSets == setsFound;
 	}
-	
+
 	public int totalGuesses() {
 		return totalGuesses;
 	}
