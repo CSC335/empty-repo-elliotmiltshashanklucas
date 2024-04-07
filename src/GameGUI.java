@@ -10,7 +10,7 @@ public class GameGUI extends Application{
 	private BorderPane all;
 	private StartScreen start;
 	public void start(Stage primaryStage) throws Exception {
-		start = new StartScreen();
+		start = new StartScreen(650,560);
 		Scene scene = new Scene(start, 650, 560);
 		primaryStage.setScene(scene);
 		primaryStage.show();
