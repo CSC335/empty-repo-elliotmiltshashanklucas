@@ -1,3 +1,4 @@
+package model;
 import static org.junit.Assert.*;
 
 import java.sql.Array;
@@ -16,6 +17,11 @@ public class GameTest {
 			}
 		}
 		private class TestTheme extends Theme{
+			public TestTheme(String n) {
+				super(n);
+				// TODO Auto-generated constructor stub
+			}
+
 			@Override 
 			public List<String> getImageStrings(int numSets){
 				List<String> images = new ArrayList<>();
