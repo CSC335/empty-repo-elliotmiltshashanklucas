@@ -25,10 +25,18 @@ public class Card {
 	
 	@Override
 	public boolean equals(Object o) {
-		if(o.getClass() != this.getClass()) {
-			return false;
-		} else {
-			return ((Card)o).getImage() == img;
-		}
+	    if (this == o) {
+	        return true;
+	    }
+	    if (o == null || getClass() != o.getClass()) {
+	        return false;
+	    }
+	    Card card = (Card) o;
+	    if (img == null) {
+	        return card.img == null;
+	    } else {
+	        return img.equals(card.img);
+	    }
 	}
 }
+	

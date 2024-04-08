@@ -43,19 +43,21 @@ public abstract class Game {
 		}
 		Collections.shuffle(cards);
 	}
-/*
+
+	/*
 	private List<String> getCardIdentifiers(int pairCount) {
 		List<String> identifiers = new ArrayList<>();
-		theme.getImages(numSets);
+		theme.getImageStrings(numSets);
 		for (int i = 1; i <= pairCount; i++) {
 			identifiers.add(String.valueOf(i));
 		}
 		return identifiers;
 	}
-*/
+
 	public Card getCard(int r, int c) {
 		return cards.get(r * cols + c);
 	}
+	*/
 
 	public state guessCard(int r, int c) {
 		Card guess = cards.get(r * cols + c);
@@ -90,9 +92,14 @@ public abstract class Game {
 		}
 	}
 
+	//Changed the logic of the function
 	private boolean checkGuesses() {
-		for (int i = 0; i < matchSize - 1; i++) {
-			if (curGuesses.get(i) != curGuesses.get(i + 1)) {
+		if(curGuesses.isEmpty()) {
+			return false;
+		}
+		Card firstCard = curGuesses.get(0);
+		for(Card card: curGuesses) {
+			if(!firstCard.equals(card)) {
 				return false;
 			}
 		}
@@ -121,4 +128,14 @@ public abstract class Game {
 	public int getNumSetsFound() {
 		return setsFound;
 	}
+
+	public void setCards(List<Card> testCards){
+	this.cards = testCards;
+	this.numClicked = 0;
+	this.setsFound = 0;
+	this.totalGuesses = 0;
+	
+}
+
+
 }
