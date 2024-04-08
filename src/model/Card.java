@@ -1,6 +1,7 @@
 /*
  * This is the card class, which holds information for the GUI
  */
+package model;
 
 public class Card {
 	private String img;
