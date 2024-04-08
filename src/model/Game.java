@@ -39,7 +39,7 @@ public abstract class Game {
 		List<String> cardFaces = theme.getImageStrings(numSets);
 		for (String id : cardFaces) {
 			for (int i = 0; i < setSize; i++) {
-				cards.add(new Card(id));
+				cards.add(new Card(id, theme.getCardBack()));
 			}
 		}
 		Collections.shuffle(cards);
@@ -54,11 +54,11 @@ public abstract class Game {
 		}
 		return identifiers;
 	}
-
+*/
 	public Card getCard(int r, int c) {
 		return cards.get(r * cols + c);
 	}
-	*/
+
 
 	public state guessCard(int r, int c) {
 		Card guess = cards.get(r * cols + c);

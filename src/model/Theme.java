@@ -13,7 +13,7 @@ public class Theme {
 	private List<String> images;
 	private boolean light;
 	private String music;
-	private String prefix;
+	private String prefix = "file:images/";
 
 	public Theme(String n) {
 		name = n;

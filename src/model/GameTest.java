@@ -36,7 +36,7 @@ public class GameTest {
 
 		@Before
 		public void setUp() {
-			testTheme = new TestTheme();
+			testTheme = new TestTheme("a");
 		}
 		
 		@Test
