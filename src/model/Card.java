@@ -9,20 +9,20 @@ import view.CardView;
 public class Card {
 	private String img;
 	private boolean flipped;
-	private Image backgroundImage;
+	Theme t = Theme.getTheme();
 	private CardView observor;
 	
 	public Card(String i, Image background) {
 		img = i;
-		backgroundImage = background;
 		flipped = false;
 	}
 	
 	public String getImage() {
 		if(isFlipped())
 			return img;
-		else 
-			return backgroundImage.getUrl();
+		System.out.println(t.getCardBack().getUrl());
+		System.out.println(t.getName());
+		return t.getCardBack().getUrl();
 	}
 	
 	public boolean isFlipped() {
@@ -31,6 +31,7 @@ public class Card {
 	
 	public void flipCard() {
 		flipped = !flipped;
+		notifyListener();
 	}
 	
 	@Override

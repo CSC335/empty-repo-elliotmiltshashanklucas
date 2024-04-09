@@ -5,6 +5,12 @@ import java.util.List;
 import javafx.scene.image.Image;
 
 public class Theme {
+	private static Theme currentTheme;
+	public static Theme getTheme() {
+		if(currentTheme == null)
+			currentTheme = new Theme("Default");
+		return currentTheme;
+	}
 	private String name;
 	private String background;
 	private String endScreenBG;
@@ -15,11 +21,11 @@ public class Theme {
 	private String music;
 	private String prefix = "file:images/";
 
-	public Theme(String n) {
+	private Theme(String n) {
 		name = n;
 	}
 
-	public Theme(String n, String bg, String esbg, String ssbg, String cb, boolean l) {
+	private Theme(String n, String bg, String esbg, String ssbg, String cb, boolean l) {
 		name = n;
 		background = bg;
 		endScreenBG = esbg;
@@ -28,7 +34,7 @@ public class Theme {
 		light = l;
 	}
 
-	public Theme(String n, String bg, String esbg, String ssbg, String cb, List<String> imgs, boolean l) {
+	private Theme(String n, String bg, String esbg, String ssbg, String cb, List<String> imgs, boolean l) {
 		name = n;
 		background = bg;
 		endScreenBG = esbg;

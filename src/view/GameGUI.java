@@ -18,14 +18,16 @@ public class GameGUI extends Application{
 	private GameView game;
 	public void start(Stage primaryStage) throws Exception {
 		start = new StartScreen(650,560);
-		Theme t = new Theme("Pets");
+		Theme t = Theme.getTheme();
+		t.setCardBack("dogs10.png");
+		System.out.println(t.getCardBack().getUrl());
 		// TODO use web images for testing to not rely on uploading images to git
 		
 		ArrayList<String> a = new ArrayList<>();
 		for(int i = 0; i < 6; i++)
 			a.add("cat" + i + ".png");
 		t.setImages(a);
-		game = new GameView(new Medium(3, 4, t), t);
+		game = new GameView(new Medium(3, 4));
 		Scene scene = new Scene(game, 650, 560);
 		primaryStage.setScene(scene);
 		primaryStage.show();

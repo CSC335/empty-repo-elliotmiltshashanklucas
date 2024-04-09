@@ -10,12 +10,11 @@ import model.Game;
 import model.Theme;
 public class GameView extends BorderPane {
 	private Game game;
-	private Theme theme;
+	private Theme theme = Theme.getTheme();
 	private GridPane board;
-	public GameView(Game g, Theme t) {
+	public GameView(Game g) {
 		super();
 		game = g;
-		theme = t;
 		layoutGUI();
 		addEventHandlers();
 	}
@@ -31,8 +30,8 @@ public class GameView extends BorderPane {
 	private void addEventHandlers() {
 		for(Node card : board.getChildren()) {
 			card.setOnMouseClicked(e -> game.guessCard(
-				GridPane.getColumnIndex((Node) e.getSource()), 
-				GridPane.getRowIndex((Node) e.getSource())
+				GridPane.getRowIndex((Node) e.getSource()),
+				GridPane.getColumnIndex((Node) e.getSource())
 			));
 		}
 	}

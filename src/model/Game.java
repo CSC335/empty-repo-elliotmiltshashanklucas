@@ -9,7 +9,7 @@ public abstract class Game {
 	private int numSets;
 	private int setSize;
 	private int matchSize;
-	private Theme theme;
+	private Theme theme = Theme.getTheme();
 	private List<Card> cards = new ArrayList<>();
 	private List<Card> curGuesses = new ArrayList<>();
 	private int numClicked = 0;
@@ -20,13 +20,12 @@ public abstract class Game {
 		ALREADY_FACE_UP, NOT_ENOUGH_CARDS, NOT_A_MATCH, MATCH, END_OF_GAME
 	}
 
-	public Game(int r, int c, int ss, int m, Theme t) {
+	public Game(int r, int c, int ss, int m) {
 		// CHANGE LATER
 		rows = 3;
 		cols = 4;
 		setSize = ss;
 		matchSize = m;
-		theme = t;
 		numSets = rows * cols / setSize;
 		newGame();
 	}

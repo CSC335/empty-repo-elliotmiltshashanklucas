@@ -9,10 +9,10 @@ public class CardView extends ImageView {
 	private Card card;
 	public CardView(Card c, Theme t) {
 		card = c;
-		this.setImage(new Image(c.getImage()));
 		c.addListener(this);
 		this.setFitHeight(100);
 		this.setFitWidth(100);
+		update();
 			
 	}
 	public void update() {
