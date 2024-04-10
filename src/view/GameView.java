@@ -11,12 +11,20 @@ import model.Theme;
 public class GameView extends BorderPane {
 	private Game game;
 	private Theme theme = Theme.getTheme();
-	private GridPane board;
+	private GridPane board; 
+	private Action onGameEnd = (() -> {;});
 	public GameView(Game g) {
 		super();
 		game = g;
+		newGame();
+	}
+	public void newGame() {
+		game.newGame();
 		layoutGUI();
 		addEventHandlers();
+	}
+	public void setOnGameEnd(Action onAction) {
+		onGameEnd = onAction;
 	}
 	private void layoutGUI() {
 		board = new GridPane();
@@ -26,13 +34,19 @@ public class GameView extends BorderPane {
 		board.setHgap(5);
 		board.setVgap(5);
 		this.setCenter(board);
+		board.setMinHeight(500);
 	}
 	private void addEventHandlers() {
 		for(Node card : board.getChildren()) {
-			card.setOnMouseClicked(e -> game.guessCard(
-				GridPane.getRowIndex((Node) e.getSource()),
-				GridPane.getColumnIndex((Node) e.getSource())
-			));
+			card.setOnMouseClicked(e -> {
+				game.guessCard(
+						GridPane.getRowIndex((Node) e.getSource()),
+						GridPane.getColumnIndex((Node) e.getSource())
+				);
+				if(game.isGameOver()) {
+					 onGameEnd.onAction();
+				}
+				});
 		}
 	}
 	

@@ -14,6 +14,7 @@ public class GameTest {
 		private class GameTestable extends Game{
 			public GameTestable(int r, int c, int ss, int m, Theme t) {
 				super(r, c, ss, m, t);
+				
 			}
 		}
 		private class TestTheme extends Theme{

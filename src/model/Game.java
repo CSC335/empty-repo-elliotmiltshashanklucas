@@ -9,13 +9,12 @@ public abstract class Game {
 	private int numSets;
 	private int setSize;
 	private int matchSize;
-	private Theme theme = Theme.getTheme();
+	protected Theme theme = Theme.getTheme();
 	private List<Card> cards = new ArrayList<>();
 	private List<Card> curGuesses = new ArrayList<>();
 	private int numClicked = 0;
 	private int setsFound = 0;
 	private int totalGuesses = 0;
-
 	public enum state {
 		ALREADY_FACE_UP, NOT_ENOUGH_CARDS, NOT_A_MATCH, MATCH, END_OF_GAME
 	}
@@ -29,16 +28,26 @@ public abstract class Game {
 		numSets = rows * cols / setSize;
 		newGame();
 	}
-
+	protected Game(int r, int c, int ss, int m, Theme t) {
+		// CHANGE LATER
+		rows = 3;
+		cols = 4;
+		setSize = ss;
+		matchSize = m;
+		numSets = rows * cols / setSize;
+		theme = t;
+		newGame();
+	}
 	public void newGame() {
 		numClicked = 0;
 		setsFound = 0;
 		totalGuesses = 0;
 		//List<String> cardIdentifiers = getCardIdentifiers(numSets);
+		cards.clear();
 		List<String> cardFaces = theme.getImageStrings(numSets);
 		for (String id : cardFaces) {
 			for (int i = 0; i < setSize; i++) {
-				cards.add(new Card(id, theme.getCardBack()));
+				cards.add(new Card(id));
 			}
 		}
 		Collections.shuffle(cards);
