@@ -20,17 +20,24 @@ public class GameGUI extends Application{
 		start = new StartScreen(650,560);
 		Theme t = Theme.getTheme();
 		t.setCardBack("dogs10.png");
-		System.out.println(t.getCardBack().getUrl());
 		// TODO use web images for testing to not rely on uploading images to git
 		
 		ArrayList<String> a = new ArrayList<>();
 		for(int i = 0; i < 6; i++)
 			a.add("cat" + i + ".png");
 		t.setImages(a);
+		start = new StartScreen(start.getWidth(), start.getHeight());
 		game = new GameView(new Medium(3, 4));
-		Scene scene = new Scene(game, 650, 560);
-		primaryStage.setScene(scene);
+
+		Scene startScene = new Scene(start, 650, 560);
+		Scene gameScene = new Scene(game, 650, 560);
+		primaryStage.setScene(startScene);
 		primaryStage.show();
+		game.setOnGameEnd(() ->  primaryStage.setScene(startScene));
+		start.setOnClickPlay(() -> {
+			primaryStage.setScene(gameScene);
+			game.newGame();
+			});
 	}
 	public static void main(String[] args) {
 		launch(args);

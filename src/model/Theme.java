@@ -21,11 +21,11 @@ public class Theme {
 	private String music;
 	private String prefix = "file:images/";
 
-	private Theme(String n) {
+	protected Theme(String n) {
 		name = n;
 	}
 
-	private Theme(String n, String bg, String esbg, String ssbg, String cb, boolean l) {
+	protected Theme(String n, String bg, String esbg, String ssbg, String cb, boolean l, Theme t) {
 		name = n;
 		background = bg;
 		endScreenBG = esbg;
@@ -34,7 +34,7 @@ public class Theme {
 		light = l;
 	}
 
-	private Theme(String n, String bg, String esbg, String ssbg, String cb, List<String> imgs, boolean l) {
+	protected Theme(String n, String bg, String esbg, String ssbg, String cb, List<String> imgs, boolean l, Theme t) {
 		name = n;
 		background = bg;
 		endScreenBG = esbg;
@@ -42,6 +42,7 @@ public class Theme {
 		cardBack = cb;
 		light = l;
 		images = imgs;
+		Theme theme = t;
 	}
 
 	public String getName() {

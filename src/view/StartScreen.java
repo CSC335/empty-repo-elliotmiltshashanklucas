@@ -16,22 +16,19 @@ public class StartScreen extends StackPane{
 	private BackgroundImage backgroundImage;
 	private Button playGame;
 	
-	public StartScreen (int width, int height) {
-		this.setWidth(width);
-		this.setHeight(height);
+	public StartScreen (double d, double e) {
+		this.setWidth(d);
+		this.setHeight(e);
 		playGame = new Button("Play Game");
 		Image image = new Image("file:images/backgroundImg.png");
 		this.setStyle("-fx-background-image: url('" + image.getUrl() + "');" +
 		                "-fx-background-size: cover;");
 		this.getChildren().addAll(playGame);
 	}
-	
+	public void setOnClickPlay(Action e) {
+		playGame.setOnAction(action -> e.onAction());
+	}
 	public void setEventHandlers() {
-		playGame.setOnAction((e)->{
-			// implement observable, 
-			// setViewTo(loginPanel);
-		
-		});
 	}
 	
 }

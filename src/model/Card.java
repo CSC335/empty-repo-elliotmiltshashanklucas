@@ -3,7 +3,6 @@
  */
 package model;
 
-import javafx.scene.image.Image;
 import view.CardView;
 
 public class Card {
@@ -12,17 +11,13 @@ public class Card {
 	Theme t = Theme.getTheme();
 	private CardView observor;
 	
-	public Card(String i, Image background) {
+	public Card(String i) {
 		img = i;
 		flipped = false;
 	}
 	
 	public String getImage() {
-		if(isFlipped())
-			return img;
-		System.out.println(t.getCardBack().getUrl());
-		System.out.println(t.getName());
-		return t.getCardBack().getUrl();
+		return img;
 	}
 	
 	public boolean isFlipped() {
