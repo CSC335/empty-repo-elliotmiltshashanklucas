@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Game {
+public class Game {
 	private int rows;
 	private int cols;
 	private int numSets;
@@ -17,7 +17,7 @@ public abstract class Game {
 	private int setsFound = 0;
 	private int totalGuesses = 0;
 
-	public enum state {
+	public static enum state {
 		ALREADY_FACE_UP, NOT_ENOUGH_CARDS, NOT_A_MATCH, MATCH, END_OF_GAME
 	}
 
@@ -27,19 +27,19 @@ public abstract class Game {
 	}
 	
 	public static Game makeGame(GameMode gameMode) {
-		//TODO MILT FINISH THIS
 		switch(gameMode) {
 		case EASY:
-			return null;
+			return new Game(3,4,4,2);
+		case HARD:
+			return new Game(3,4,3,3);
 		default:
-			return null;
+			return new Game(3,4,2,2);
 		}
 	}
 	
-	public Game(int r, int c, int ss, int m) {
-		// CHANGE LATER
-		rows = 3;
-		cols = 4;
+	protected Game(int r, int c, int ss, int m) {
+		rows = r;
+		cols = c;
 		setSize = ss;
 		matchSize = m;
 		numSets = rows * cols / setSize;
@@ -47,9 +47,8 @@ public abstract class Game {
 	}
 
 	protected Game(int r, int c, int ss, int m, Theme t) {
-		// CHANGE LATER
-		rows = 3;
-		cols = 4;
+		rows = r;
+		cols = c;
 		setSize = ss;
 		matchSize = m;
 		numSets = rows * cols / setSize;
