@@ -1,4 +1,5 @@
 package model;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,10 +16,26 @@ public abstract class Game {
 	private int numClicked = 0;
 	private int setsFound = 0;
 	private int totalGuesses = 0;
+
 	public enum state {
 		ALREADY_FACE_UP, NOT_ENOUGH_CARDS, NOT_A_MATCH, MATCH, END_OF_GAME
 	}
 
+
+	public static enum GameMode {
+		EASY, MEDIUM, HARD
+	}
+	
+	public static Game makeGame(GameMode gameMode) {
+		//TODO MILT FINISH THIS
+		switch(gameMode) {
+		case EASY:
+			return null;
+		default:
+			return null;
+		}
+	}
+	
 	public Game(int r, int c, int ss, int m) {
 		// CHANGE LATER
 		rows = 3;
@@ -28,6 +45,7 @@ public abstract class Game {
 		numSets = rows * cols / setSize;
 		newGame();
 	}
+
 	protected Game(int r, int c, int ss, int m, Theme t) {
 		// CHANGE LATER
 		rows = 3;
@@ -38,11 +56,12 @@ public abstract class Game {
 		theme = t;
 		newGame();
 	}
+
 	public void newGame() {
 		numClicked = 0;
 		setsFound = 0;
 		totalGuesses = 0;
-		//List<String> cardIdentifiers = getCardIdentifiers(numSets);
+		// List<String> cardIdentifiers = getCardIdentifiers(numSets);
 		cards.clear();
 		List<String> cardFaces = theme.getImageStrings(numSets);
 		for (String id : cardFaces) {
@@ -54,19 +73,14 @@ public abstract class Game {
 	}
 
 	/*
-	private List<String> getCardIdentifiers(int pairCount) {
-		List<String> identifiers = new ArrayList<>();
-		theme.getImageStrings(numSets);
-		for (int i = 1; i <= pairCount; i++) {
-			identifiers.add(String.valueOf(i));
-		}
-		return identifiers;
-	}
-*/
+	 * private List<String> getCardIdentifiers(int pairCount) { List<String>
+	 * identifiers = new ArrayList<>(); theme.getImageStrings(numSets); for (int i =
+	 * 1; i <= pairCount; i++) { identifiers.add(String.valueOf(i)); } return
+	 * identifiers; }
+	 */
 	public Card getCard(int r, int c) {
 		return cards.get(r * cols + c);
 	}
-
 
 	public state guessCard(int r, int c) {
 		Card guess = cards.get(r * cols + c);
@@ -101,14 +115,14 @@ public abstract class Game {
 		}
 	}
 
-	//Changed the logic of the function
+	// Changed the logic of the function
 	private boolean checkGuesses() {
-		if(curGuesses.isEmpty()) {
+		if (curGuesses.isEmpty()) {
 			return false;
 		}
 		Card firstCard = curGuesses.get(0);
-		for(Card card: curGuesses) {
-			if(!firstCard.equals(card)) {
+		for (Card card : curGuesses) {
+			if (!firstCard.equals(card)) {
 				return false;
 			}
 		}
@@ -138,13 +152,12 @@ public abstract class Game {
 		return setsFound;
 	}
 
-	public void setCards(List<Card> testCards){
-	this.cards = testCards;
-	this.numClicked = 0;
-	this.setsFound = 0;
-	this.totalGuesses = 0;
-	
-}
+	public void setCards(List<Card> testCards) {
+		this.cards = testCards;
+		this.numClicked = 0;
+		this.setsFound = 0;
+		this.totalGuesses = 0;
 
+	}
 
 }
