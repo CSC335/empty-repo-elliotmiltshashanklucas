@@ -22,11 +22,11 @@ public class Game {
 	}
 
 
-	public static enum GameMode {
+	public static enum difficulty {
 		EASY, MEDIUM, HARD
 	}
 	
-	public static Game makeGame(GameMode gameMode) {
+	public static Game makeGame(difficulty gameMode) {
 		switch(gameMode) {
 		case EASY:
 			return new Game(3,4,4,2);

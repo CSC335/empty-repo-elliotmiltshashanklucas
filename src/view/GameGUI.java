@@ -28,9 +28,9 @@ public class GameGUI extends Application{
 			a.add("cat" + i + ".png");
 		t.setImages(a);
 		start = new StartScreen(start.getWidth(), start.getHeight());
-		game = new GameView(new Medium(3, 4));
+		game = new GameView(Game.makeGame(Game.difficulty.MEDIUM));
 		login = new LoginScreen(login.getWidth(), login.getHeight());
-		game = new GameView(Game.makeGame(Game.GameMode.MEDIUM));
+		game = new GameView(Game.makeGame(Game.difficulty.MEDIUM));
 
 		Scene startScene = new Scene(start, 650, 560);
 		Scene gameScene = new Scene(game, 650, 560);
