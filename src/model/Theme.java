@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
 import javafx.scene.image.Image;
 
@@ -25,7 +25,7 @@ public class Theme {
 	private boolean light = false;
 	private String music;
 	private String prefix = "file:images/";
-	private static Dictionary<String, Theme> allThemes;
+	private static HashMap<String, Theme> allThemes = new HashMap<String, Theme>();
 
 	protected Theme(String themeName) {
 		name = themeName;
