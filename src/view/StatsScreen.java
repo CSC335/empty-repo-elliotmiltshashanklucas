@@ -86,11 +86,14 @@ public class StatsScreen extends GridPane{
 	public void getRecent() {
 		NumberAxis x = new NumberAxis();
 		NumberAxis y = new NumberAxis();
+		x.setLabel("Past Games");
+		y.setLabel("Number of Attempts");
 		LineChart<Number, Number> lineChart = new LineChart<>(x, y);
         lineChart.setTitle("Recent Performance for --- mode");
 
         XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-        series1.setName("Series 1");
+        series1.setName("Player performance");
+        // List = account.getRecent(5);
         series1.getData().add(new XYChart.Data<>(1, 10));
         series1.getData().add(new XYChart.Data<>(2, 20));
         series1.getData().add(new XYChart.Data<>(3, 15));
