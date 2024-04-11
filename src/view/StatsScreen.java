@@ -1,27 +1,50 @@
 package view;
 
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.geometry.Insets;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import model.Account;
 
 public class StatsScreen extends GridPane{
 	
 	private Account account;
+	
+	private Label bestEasyScore;
+	
+	private Label bestMediumScore;
+	
+	private Label bestHardScore;
+	
+	private Label averageEasyScore;
+	
+	private Label averageMediumScore;
+	
+	private Label averageHardScore;
+	
+	private Label gamesPlayed;
+	
+	private VBox  labels;
 									// Account a
 	public StatsScreen(double width, double height){
 		this.setWidth(width);
 		this.setHeight(height);
 		// this.account = a;
 		compToAverage();
+		showBest();
+		getRecent();
 	}
 	
 	public void compToAverage() {
 		CategoryAxis x = new CategoryAxis();
 		x.setLabel("Player");
 		NumberAxis y = new NumberAxis();
+		// need to handle difficulties too -- maybe implement a dropdown select?
 		y.setLabel("Average attempts per game");
 		BarChart<String, Number> barChart = new BarChart<>(x,y);
 		XYChart.Series<String, Number> series1 = new XYChart.Series<String, Number>();
@@ -42,11 +65,44 @@ public class StatsScreen extends GridPane{
 	}
 	
 	public void showBest() {
+		labels = new VBox(10);
+		// add user info
+		bestEasyScore = new Label("Best easy score: ");
+		bestMediumScore = new Label("Best medium score: ");	
+		bestHardScore = new Label("Best hard score: ");
+		averageEasyScore = new Label("Average easy score: ");
+		averageMediumScore = new Label("Average medium score: ");
+		averageHardScore = new Label("Average hard score: ");
+		gamesPlayed = new Label("Games played: ");
+		labels.getChildren().addAll(bestEasyScore, bestMediumScore, bestHardScore, 
+				averageEasyScore, averageMediumScore, averageHardScore, gamesPlayed);
+		this.setConstraints(labels, 3, 2,1,1);
+		labels.setPadding(new Insets(50,0,0,0));
+		this.getChildren().add(labels);
+		
 		
 	}
 	
 	public void getRecent() {
-		
+		NumberAxis x = new NumberAxis();
+		NumberAxis y = new NumberAxis();
+		LineChart<Number, Number> lineChart = new LineChart<>(x, y);
+        lineChart.setTitle("Recent Performance for --- mode");
+
+        XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+        series1.setName("Series 1");
+        series1.getData().add(new XYChart.Data<>(1, 10));
+        series1.getData().add(new XYChart.Data<>(2, 20));
+        series1.getData().add(new XYChart.Data<>(3, 15));
+        series1.getData().add(new XYChart.Data<>(4, 25));
+        series1.getData().add(new XYChart.Data<>(5, 14));
+
+        lineChart.getData().add(series1);
+        lineChart.setPrefSize(500, 250);
+		this.setConstraints(lineChart, 1, 3,3,1);
+		this.getChildren().add(lineChart);
+        
+
 	}
 	
 	
