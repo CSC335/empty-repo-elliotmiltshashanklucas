@@ -15,6 +15,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.*;
 
+/**
+ * A custom login screen layout for managing user authentication and account creation.
+ * @author Lucas Liang
+ */
 public class LoginScreen extends BorderPane {
 
 	private Label accountNameLabel;
@@ -73,6 +77,12 @@ public class LoginScreen extends BorderPane {
 
 	}
 
+    /**
+     * Adds event handlers for login, password typing, and logout actions.
+     *
+     * @param account The Account object associated with the login screen.
+     * @return none
+     */
 	public void addEventHandlers(Account account) {
 		login.setOnAction(e -> {
 			if (account.activeAccount() != null) {

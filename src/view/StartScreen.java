@@ -11,6 +11,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
+/**
+ * A customized start screen layout containing a background image and a play button.
+ * @author Lucas Liang
+ */
 public class StartScreen extends StackPane{
 	
 	private BackgroundImage backgroundImage;

@@ -10,6 +10,11 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import model.Account;
+/**
+ * A customized grid layout for displaying statistical information related to 
+ * a player's game performance.
+ * @author Lucas Liang
+ */
 
 public class StatsScreen extends GridPane{
 	
@@ -30,7 +35,8 @@ public class StatsScreen extends GridPane{
 	private Label gamesPlayed;
 	
 	private VBox  labels;
-									// Account a
+	
+				// Account a
 	public StatsScreen(double width, double height){
 		this.setWidth(width);
 		this.setHeight(height);
@@ -40,6 +46,13 @@ public class StatsScreen extends GridPane{
 		getRecent();
 	}
 	
+    /**
+     * Compares the player's average performance against other players and 
+     * displays it using a bar chart.
+     * Assumes the existence of an Account object with relevant statistics.
+     * @param none
+     * @return none
+     */
 	public void compToAverage() {
 		CategoryAxis x = new CategoryAxis();
 		x.setLabel("Player");
@@ -64,6 +77,11 @@ public class StatsScreen extends GridPane{
 		
 	}
 	
+    /**
+     * Displays the best scores and average scores for different game modes.
+     * @param none
+     * @return none
+     */
 	public void showBest() {
 		labels = new VBox(10);
 		// add user info
@@ -83,6 +101,11 @@ public class StatsScreen extends GridPane{
 		
 	}
 	
+    /**
+     * Retrieves and displays recent performance data in a line chart format.
+     * @param none
+     * @return none
+     */
 	public void getRecent() {
 		NumberAxis x = new NumberAxis();
 		NumberAxis y = new NumberAxis();
