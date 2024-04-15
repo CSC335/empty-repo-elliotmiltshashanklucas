@@ -24,8 +24,6 @@ public class Theme {
 
 	private String name;
 	private String background;
-	private String endScreenBG;
-	private String startScreenBG;
 	private String cardBack;
 	private List<String> images = new ArrayList<>();
 	private boolean light = false;
@@ -57,22 +55,6 @@ public class Theme {
 
 	public void setBackground(String b) {
 		background = b;
-	}
-
-	public Image getEndScreenBG() {
-		return new Image(prefix + endScreenBG);
-	}
-
-	public void setEndScreenBG(String es) {
-		endScreenBG = es;
-	}
-
-	public Image getStartScreenBG() {
-		return new Image(prefix + startScreenBG);
-	}
-
-	public void setStartScreenBG(String ss) {
-		startScreenBG = ss;
 	}
 
 	public Image getCardBack() {
