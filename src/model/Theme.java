@@ -15,6 +15,12 @@ public class Theme {
 		}
 		return currentTheme;
 	}
+	
+	public static void setTheme(String newTheme) {
+		if(allThemes.get(newTheme) != null) {
+			currentTheme = allThemes.get(newTheme);
+		}
+	}
 
 	private String name;
 	private String background;
