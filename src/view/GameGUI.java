@@ -22,14 +22,7 @@ public class GameGUI extends Application{
 		
 		start = new StartScreen(650,560);
 		login = new LoginScreen(650,560);
-		Theme t = Theme.getTheme();
-		t.setCardBack("dogs10.png");
 		// TODO use web images for testing to not rely on uploading images to git
-		
-		ArrayList<String> a = new ArrayList<>();
-		for(int i = 0; i < 6; i++)
-			a.add("cat" + i + ".png");
-		t.setImages(a);
 		start = new StartScreen(start.getWidth(), start.getHeight());
 		stats = new StatsScreen(start.getWidth(), start.getHeight());
 		game = new GameView(Game.makeGame(Game.difficulty.MEDIUM));
@@ -41,7 +34,7 @@ public class GameGUI extends Application{
 		Scene loginScene = new Scene(login, 500, 175);
 		Scene statsScene = new Scene(stats, 650,560);
 		statsScene.getStylesheets().add("styles.css");
-		primaryStage.setScene(statsScene);
+		primaryStage.setScene(startScene);
 		primaryStage.show();
 		game.setOnGameEnd(() ->  primaryStage.setScene(startScene));
 		start.setOnClickPlay(() -> {

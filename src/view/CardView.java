@@ -9,15 +9,16 @@ import javafx.util.Duration;
 import model.Card;
 import model.Theme;
 
-public class CardView extends ImageView {
+public class CardView extends ImageView implements Observer{
 	private Card card;
 	private Theme theme = Theme.getTheme();
-	public CardView(Card c, Theme t) {
+	public CardView(Card c) {
 		card = c;
 		c.addListener(this);
 		this.setFitHeight(100);
 		this.setFitWidth(100);
 		updateImage();
+		Theme.addObserver(this);
 	}
 	private RotateTransition createFlipAnimation(int angle) {
 		RotateTransition rotator = new RotateTransition(Duration.millis(500));
@@ -36,6 +37,7 @@ public class CardView extends ImageView {
 			this.setImage(theme.getCardBack());
 	}
 	public void update() {
+		theme = Theme.getTheme();
 		var rotator = createFlipAnimation(90);
 		rotator.setOnFinished(e -> {
 			updateImage();

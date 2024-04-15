@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Game {
+import view.Observer;
+
+public class Game implements Observer{
 	private int rows;
 	private int cols;
 	private int numSets;
@@ -38,6 +40,7 @@ public class Game {
 	}
 	
 	protected Game(int r, int c, int ss, int m) {
+		Theme.addObserver(this);
 		rows = r;
 		cols = c;
 		setSize = ss;
@@ -47,6 +50,7 @@ public class Game {
 	}
 
 	protected Game(int r, int c, int ss, int m, Theme t) {
+		Theme.addObserver(this);
 		rows = r;
 		cols = c;
 		setSize = ss;
@@ -157,6 +161,11 @@ public class Game {
 		this.setsFound = 0;
 		this.totalGuesses = 0;
 
+	}
+
+	@Override
+	public void update() {
+		theme = Theme.getTheme();
 	}
 
 }

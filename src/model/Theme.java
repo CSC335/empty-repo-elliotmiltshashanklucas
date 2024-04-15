@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import javafx.scene.image.Image;
+import view.Observer;
 
 public class Theme {
 	private static Theme currentTheme;
@@ -17,9 +18,11 @@ public class Theme {
 	}
 	
 	public static void setTheme(String newTheme) {
+		// Starter Themes: Cats, Dogs, Planets, Fish, Jungle
 		if(allThemes.get(newTheme) != null) {
 			currentTheme = allThemes.get(newTheme);
 		}
+		notifyListeners();
 	}
 
 	private String name;
@@ -30,9 +33,20 @@ public class Theme {
 	private String music;
 	private String prefix = "file:images/";
 	private static HashMap<String, Theme> allThemes = new HashMap<String, Theme>();
+	private static List<Observer> observerList = new ArrayList<>();
 
 	protected Theme(String themeName) {
 		name = themeName;
+	}
+
+	public static void addObserver(Observer o) {
+		observerList.add(o);
+	}
+	
+	private static void notifyListeners() {
+		for(Observer o : observerList) {
+			o.update();
+		}
 	}
 	/*
 	 * protected Theme(String n, String bg, String esbg, String ssbg, String cb,
@@ -55,6 +69,7 @@ public class Theme {
 
 	public void setBackground(String b) {
 		background = b;
+		notifyListeners();
 	}
 
 	public Image getCardBack() {
@@ -63,6 +78,7 @@ public class Theme {
 
 	public void setCardBack(String cb) {
 		cardBack = cb;
+		notifyListeners();
 	}
 
 	public List<Image> getAllImages() {
@@ -93,10 +109,12 @@ public class Theme {
 
 	public void addCard(String s) {
 		images.add(s);
+		notifyListeners();
 	}
 
 	public void setImages(List<String> i) {
 		images = i;
+		notifyListeners();
 	}
 
 	public boolean lightmode() {
@@ -105,6 +123,7 @@ public class Theme {
 
 	public void setLightmode(boolean b) {
 		light = b;
+		notifyListeners();
 	}
 
 	private static void setUpThemes() {
@@ -123,13 +142,13 @@ public class Theme {
 		// Dogs Theme
 		t = new Theme("Dogs");
 		t.setBackground("backgroundImg.png");
-		t.addCard("cat1.png");
-		t.addCard("cat2.png");
-		t.addCard("cat3.png");
-		t.addCard("cat4.png");
-		t.addCard("cat5.png");
-		t.addCard("cat6.png");
-		t.setCardBack("dogs10.png");
+		t.addCard("dogs11.png");
+		t.addCard("dogs12.png");
+		t.addCard("dogs13.png");
+		t.addCard("dogs14.png");
+		t.addCard("dogs15.png");
+		t.addCard("dogs16.png");
+		t.setCardBack("cat21.png");
 		allThemes.put("Dogs", t);
 		
 		// Planets Theme
