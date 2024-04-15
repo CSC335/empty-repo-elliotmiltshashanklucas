@@ -14,4 +14,4 @@
 *.rar
 .DS_Store
 .classpath
-
+.project
