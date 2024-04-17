@@ -17,7 +17,7 @@ public class CardView extends ImageView implements Observer{
 		c.addListener(this);
 		this.setFitHeight(100);
 		this.setFitWidth(100);
-		updateImage();
+		updateImage(card.isFlipped());
 		Theme.addObserver(this);
 	}
 	private RotateTransition createFlipAnimation(int angle) {
@@ -30,22 +30,26 @@ public class CardView extends ImageView implements Observer{
 	    rotator.setCycleCount(1);
 	    return rotator;
 	}
-	private void updateImage() {
-		if(card.isFlipped())
+	private void updateImage(boolean isFlipped) {
+		if(isFlipped)
 			this.setImage(new Image(card.getImage()));
 		else 
 			this.setImage(theme.getCardBack());
 	}
 	public void update() {
+		var flipped = card.isFlipped();
 		theme = Theme.getTheme();
 		var rotator = createFlipAnimation(90);
 		rotator.setOnFinished(e -> {
-			updateImage();
+			updateImage(flipped);
 			this.setRotate(90);
 			var otherFlip = createFlipAnimation(0);
 			otherFlip.play();
 		});
+		if(!card.isFlipped())
+			rotator.setDelay(Duration.millis(1000));
 		rotator.play();
+
 	}
 	
 }
