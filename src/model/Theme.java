@@ -239,16 +239,16 @@ public class Theme {
 		// Planets Theme
 		t = new Theme("Planets");
 		t.setBackground("backgroundImg.png");
-		t.addCard("mercury.png");
-		t.addCard("venus.png");
-		t.addCard("earth.png");
-		t.addCard("mars.png");
-		t.addCard("jupiter.png");
-		t.addCard("saturn.png");
-		t.addCard("uranus.png");
-		t.addCard("neptune.png");
-		t.addCard("pluto.png");
-		t.addCard("moon.png");
+		t.addCard("mercury.jpg");
+		t.addCard("venus.jpg");
+		t.addCard("earth.jpg");
+		t.addCard("mars.jpg");
+		t.addCard("jupiter.jpg");
+		t.addCard("saturn.jpg");
+		t.addCard("uranus.jpg");
+		t.addCard("neptune.jpg");
+		t.addCard("pluto.jpg");
+		t.addCard("moon.jpg");
 		t.setCardBack("planetsCardBack.png");
 		allThemes.put("Planets", t);
 
@@ -256,18 +256,18 @@ public class Theme {
 		t = new Theme("Fish");
 		t.setBackground("backgroundImg.png");
 		for (int i = 1; i <= 10; i++) {
-			t.addCard("fish" + i + ".jpg");
+			t.addCard("fish" + i + ".jpeg");
 		}
-		t.setCardBack("fishCardBack.png");
+		t.setCardBack("fishCardBack.jpg");
 		allThemes.put("Fish", t);
 
 		// Jungle Theme
 		t = new Theme("Jungle");
-		t.setBackground("jungleBackground.png");
+		t.setBackground("jungleBackground.jpg");
 		for (int i = 1; i <= 10; i++) {
 			t.addCard("jungle" + i + ".jpg");
 		}
-		t.setCardBack("jungleCardBack.png");
+		t.setCardBack("jungleCardBack.jpg");
 		allThemes.put("Jungle", t);
 
 		currentTheme = allThemes.get("Cats");

@@ -21,7 +21,6 @@ public class GameView extends BorderPane implements Observer {
 	private GridPane board;
 	private Action onGameEnd = () -> {
 	}; // Placeholder for end-game action
-	private Button changeTheme;
 
 	/**
 	 * Constructs a new GameView with a specified game model. Initializes the game
@@ -64,9 +63,6 @@ public class GameView extends BorderPane implements Observer {
 		board.setVgap(5);
 		this.setCenter(board);
 		board.setMinHeight(500);
-
-		changeTheme = new Button("Dog Theme");
-		board.add(changeTheme, 5, 5);
 	}
 
 	private void addEventHandlers() {
@@ -79,11 +75,6 @@ public class GameView extends BorderPane implements Observer {
 				}
 			});
 		}
-
-		changeTheme.setOnAction(e -> {
-			Theme.setTheme("Dogs");
-			newGame();
-		});
 	}
 
 	/**
