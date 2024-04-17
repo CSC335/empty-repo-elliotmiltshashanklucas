@@ -27,6 +27,7 @@ public class GameGUI extends Application {
 	private Button previousPane = new Button("Close Settings");
 
 	public void start(Stage primaryStage) throws Exception {
+		accounts = new AccountManager();
 		all = new BorderPane();
 		all.setMinHeight(700);
 		all.setMinWidth(600);
@@ -41,7 +42,7 @@ public class GameGUI extends Application {
 		settings.setTop(previousPane);
 		stats.getStylesheets().add("styles.css");
 		all.setTop(settingsButton);
-		all.setCenter(start);
+		all.setCenter(login);
 		Scene scene = new Scene(all);
 		primaryStage.setScene(scene);
 		primaryStage.show();

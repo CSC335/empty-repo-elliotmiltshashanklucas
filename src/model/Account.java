@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Account implements Serializable{
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5305138822007823784L;
 	private static Map<String, Account> accountInfo = new HashMap<>();
     private String userName;
     private String password; 
