@@ -9,41 +9,81 @@ import javafx.util.Duration;
 import model.Card;
 import model.Theme;
 
-public class CardView extends ImageView {
+/**
+ * CardView is an ImageView representing a card in a game, capable of displaying
+ * different images based on the card's state and animating flips between these
+ * states. It observes changes in the card and theme models to update its
+ * appearance.
+ */
+public class CardView extends ImageView implements Observer {
 	private Card card;
 	private Theme theme = Theme.getTheme();
-	public CardView(Card c, Theme t) {
+
+	/**
+	 * Constructs a new CardView with a specified card. Sets up the image view
+	 * properties, registers as an observer to the card and theme, and initializes
+	 * the card image based on its current state.
+	 * 
+	 * @param c the card to be displayed and observed
+	 */
+	public CardView(Card c) {
 		card = c;
 		c.addListener(this);
 		this.setFitHeight(100);
 		this.setFitWidth(100);
-		updateImage();
+		updateImage(card.isFlipped());
+		Theme.addObserver(this);
 	}
+
+	/**
+	 * Creates a flip animation for the card view.
+	 * 
+	 * @param angle the angle to end the rotation at
+	 * @return a configured RotateTransition object
+	 */
 	private RotateTransition createFlipAnimation(int angle) {
 		RotateTransition rotator = new RotateTransition(Duration.millis(500));
 		rotator.setNode(this);
-	    rotator.setAxis(Rotate.Y_AXIS);
-	    rotator.setFromAngle(0);
-	    rotator.setToAngle(angle);
-	    rotator.setInterpolator(Interpolator.LINEAR);
-	    rotator.setCycleCount(1);
-	    return rotator;
+		rotator.setAxis(Rotate.Y_AXIS);
+		rotator.setFromAngle(0);
+		rotator.setToAngle(angle);
+		rotator.setInterpolator(Interpolator.LINEAR);
+		rotator.setCycleCount(1);
+		return rotator;
 	}
-	private void updateImage() {
-		if(card.isFlipped())
+
+	/**
+	 * Updates the image displayed by the ImageView based on whether the card is
+	 * flipped.
+	 * 
+	 * @param isFlipped true if the card is flipped (showing its face), false if
+	 *                  showing its back
+	 */
+	private void updateImage(boolean isFlipped) {
+		if (isFlipped)
 			this.setImage(new Image(card.getImage()));
-		else 
+		else
 			this.setImage(theme.getCardBack());
 	}
+
+	/**
+	 * Called when an observed object changes. This method handles flipping
+	 * animations and updates the card's image according to the new state.
+	 */
 	public void update() {
+		var flipped = card.isFlipped();
+		theme = Theme.getTheme();
 		var rotator = createFlipAnimation(90);
 		rotator.setOnFinished(e -> {
-			updateImage();
+			updateImage(flipped);
 			this.setRotate(90);
 			var otherFlip = createFlipAnimation(0);
 			otherFlip.play();
 		});
+		if (!card.isFlipped())
+			rotator.setDelay(Duration.millis(1000));
 		rotator.play();
+
 	}
-	
+
 }

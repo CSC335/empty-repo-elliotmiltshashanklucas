@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Account implements Serializable{
-    private static Map<String, Account> accountInfo = new HashMap<>();
+    private static final long serialVersionUID = 1L;
+	private static Map<String, Account> accountInfo = new HashMap<>();
     private String userName;
     private String password; 
     
@@ -38,14 +39,12 @@ public class Account implements Serializable{
 
 	}
 
-
     public String getUserName() {
         return userName;
     }
     public boolean correctPassword(String inputPassword) {
     	return (this.password.equals(inputPassword));
     }
-
 }
 
 

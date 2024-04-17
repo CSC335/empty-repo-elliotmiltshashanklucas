@@ -22,6 +22,7 @@ public class GameGUI extends Application {
 	private GameView game;
 	private SettingsPane settings;
 	private AccountManager accounts;
+
 	private Button settingsButton = new Button("Settings");
 	private Button previousPane = new Button("Close Settings");
 
@@ -30,11 +31,14 @@ public class GameGUI extends Application {
 		all.setMinHeight(700);
 		all.setMinWidth(600);
 		start = new StartScreen(650, 560);
+
 		login = new LoginScreen(accounts, primaryStage);
 		// TODO use web images for testing to not rely on uploading images to git
 		start = new StartScreen(start.getWidth(), start.getHeight());
 		stats = new StatsScreen(start.getWidth(), start.getHeight());
 		game = new GameView(Game.makeGame(Game.difficulty.MEDIUM));
+		settings = new SettingsPane();
+		settings.setTop(previousPane);
 		stats.getStylesheets().add("styles.css");
 		all.setTop(settingsButton);
 		all.setCenter(start);

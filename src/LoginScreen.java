@@ -9,8 +9,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class LoginScreen extends BorderPane{
-	
+public class LoginScreen extends BorderPane {
+
 	private Label accountNameLabel;
 	private Label passwordLabel;
 
@@ -26,13 +26,14 @@ public class LoginScreen extends BorderPane{
 	private HBox passwordDetails;
 	private VBox loginPanel;
 	private VBox loginStatus;
-	
+
 	private Button makeAccount;
 
 	private String curPW = "";
 
 	private Alert alert;
-	LoginScreen(){
+
+	LoginScreen() {
 		alert = new Alert(AlertType.INFORMATION);
 
 		accountNameLabel = new Label("Account Name");
@@ -55,9 +56,9 @@ public class LoginScreen extends BorderPane{
 		status = new Label("Login first");
 		makeAccount = new Button("Create new Account");
 		loginPanel.getChildren().addAll(status, usernameDetails, passwordDetails, makeAccount);
-		usernameDetails.setPadding(new Insets(0,0,0,80));
-		passwordDetails.setPadding(new Insets(0,0,0,80));
-		loginPanel.setSpacing(10); 
+		usernameDetails.setPadding(new Insets(0, 0, 0, 80));
+		passwordDetails.setPadding(new Insets(0, 0, 0, 80));
+		loginPanel.setSpacing(10);
 		loginPanel.setAlignment(Pos.CENTER);
 	}
 
