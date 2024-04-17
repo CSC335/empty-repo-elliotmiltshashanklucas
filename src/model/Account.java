@@ -32,10 +32,21 @@ public class Account implements Serializable{
         return true;
     }
 
+
+	public void logout() {
+		// TODO Auto-generated method stub
+
+	}
+
+
     public String getUserName() {
         return userName;
     }
     public boolean correctPassword(String inputPassword) {
     	return (this.password.equals(inputPassword));
     }
+
 }
+
+
+

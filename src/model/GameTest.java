@@ -13,11 +13,13 @@ import org.junit.Test;
  * This class tests all the methods implemented in Game class 
  */
 public class GameTest {
+
+
 		// Initialize the class
 		private class GameTestable extends Game{
 			public GameTestable(int r, int c, int ss, int m, Theme t) {
 				super(r, c, ss, m, t);
-				
+
 			}
 		}
 		// Initialize the them
@@ -66,20 +68,8 @@ public class GameTest {
 			testCards.add(new Card("Image1"));
 			game.setCards(testCards);
 			assertEquals(Game.state.NOT_ENOUGH_CARDS, game.guessCard(0, 0));
+
 		}
-		//Using it as a reference to test
-		/*
-		public void setMatchingCards(boolean matching) {
-			List<Card> testCards = new ArrayList<>();
-			if(matching){
-					testCards.add(new Card("match1"));
-					testCards.add(new Card("match1"));
-			}else {
-					testCards.add(new Card("match2"));
-					testCards.add(new Card("match3"));
-			}
-		}
-		*/
 		
 		/*
 		 * Testing for matching card logic in guess card

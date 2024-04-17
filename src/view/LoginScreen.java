@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 import model.Account;
 import model.AccountManager;
 
+
 public class LoginScreen extends BorderPane {
 	private TextField usernameField = new TextField();
 	private PasswordField passwordField = new PasswordField();
@@ -65,6 +66,14 @@ public class LoginScreen extends BorderPane {
 		this.setCenter(loginPanel);
 
 	}
+
+	/**
+	 * Adds event handlers for login, password typing, and logout actions.
+	 *
+	 * @param account The Account object associated with the login screen.
+	 * @return none
+	 */
+
 
 	private void promptLoadState() {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -204,4 +213,6 @@ public class LoginScreen extends BorderPane {
 	public Account getCurrentUser() {
 		return accounts.getLoggedInAccount();
 	}
+
 }
+
