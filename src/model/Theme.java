@@ -18,10 +18,10 @@ public class Theme {
 		}
 		return currentTheme;
 	}
-	
+
 	public static void setTheme(String newTheme) {
 		// Starter Themes: Cats, Dogs, Planets, Fish, Jungle
-		if(allThemes.get(newTheme) != null) {
+		if (allThemes.get(newTheme) != null) {
 			currentTheme = allThemes.get(newTheme);
 		}
 		notifyListeners();
@@ -44,9 +44,9 @@ public class Theme {
 	public static void addObserver(Observer o) {
 		observerList.add(o);
 	}
-	
+
 	private static void notifyListeners() {
-		for(Observer o : observerList) {
+		for (Observer o : observerList) {
 			o.update();
 		}
 	}
@@ -127,6 +127,7 @@ public class Theme {
 		light = b;
 		notifyListeners();
 	}
+
 	public static Set<String> getThemes() {
 		return allThemes.keySet();
 	}
@@ -155,7 +156,7 @@ public class Theme {
 		t.addCard("dogs16.png");
 		t.setCardBack("cat21.png");
 		allThemes.put("Dogs", t);
-		
+
 		// Planets Theme
 		t = new Theme("Planets");
 		t.setBackground("backgroundImg.png");
@@ -171,25 +172,25 @@ public class Theme {
 		t.addCard("moon.png");
 		t.setCardBack("planetsCardBack.png");
 		allThemes.put("Planets", t);
-		
+
 		// Fish Theme
 		t = new Theme("Fish");
 		t.setBackground("backgroundImg.png");
-		for(int i = 1; i<=10; i++) {
-			t.addCard("fish"+i+".jpg");
+		for (int i = 1; i <= 10; i++) {
+			t.addCard("fish" + i + ".jpg");
 		}
 		t.setCardBack("fishCardBack.png");
 		allThemes.put("Fish", t);
-		
+
 		// Jungle Theme
 		t = new Theme("Jungle");
 		t.setBackground("jungleBackground.png");
-		for(int i = 1; i<=10; i++) {
-			t.addCard("jungle"+i+".jpg");
+		for (int i = 1; i <= 10; i++) {
+			t.addCard("jungle" + i + ".jpg");
 		}
 		t.setCardBack("jungleCardBack.png");
 		allThemes.put("Jungle", t);
-		
+
 		currentTheme = allThemes.get("Cats");
 	}
 

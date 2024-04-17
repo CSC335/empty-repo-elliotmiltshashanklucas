@@ -14,8 +14,7 @@ public class Account {
 
 	public void logout() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 }

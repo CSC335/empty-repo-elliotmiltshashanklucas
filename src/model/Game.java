@@ -6,7 +6,7 @@ import java.util.List;
 
 import view.Observer;
 
-public class Game implements Observer{
+public class Game implements Observer {
 	private int rows;
 	private int cols;
 	private int numSets;
@@ -23,22 +23,21 @@ public class Game implements Observer{
 		ALREADY_FACE_UP, NOT_ENOUGH_CARDS, NOT_A_MATCH, MATCH, END_OF_GAME
 	}
 
-
 	public static enum difficulty {
 		EASY, MEDIUM, HARD
 	}
-	
+
 	public static Game makeGame(difficulty gameMode) {
-		switch(gameMode) {
+		switch (gameMode) {
 		case EASY:
-			return new Game(3,4,4,2);
+			return new Game(3, 4, 4, 2);
 		case HARD:
-			return new Game(3,4,3,3);
+			return new Game(3, 4, 3, 3);
 		default:
-			return new Game(3,4,2,2);
+			return new Game(3, 4, 2, 2);
 		}
 	}
-	
+
 	protected Game(int r, int c, int ss, int m) {
 		Theme.addObserver(this);
 		rows = r;

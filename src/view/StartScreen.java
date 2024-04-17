@@ -12,27 +12,30 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 /**
- * A customized start screen layout containing a background image and a play button.
+ * A customized start screen layout containing a background image and a play
+ * button.
+ * 
  * @author Lucas Liang
  */
-public class StartScreen extends StackPane{
-	
+public class StartScreen extends StackPane {
+
 	private BackgroundImage backgroundImage;
 	private Button playGame;
-	
-	public StartScreen (double d, double e) {
+
+	public StartScreen(double d, double e) {
 		this.setWidth(d);
 		this.setHeight(e);
 		playGame = new Button("Play Game");
 		Image image = new Image("file:images/backgroundImg.png");
-		this.setStyle("-fx-background-image: url('" + image.getUrl() + "');" +
-		                "-fx-background-size: cover;");
+		this.setStyle("-fx-background-image: url('" + image.getUrl() + "');" + "-fx-background-size: cover;");
 		this.getChildren().addAll(playGame);
 	}
+
 	public void setOnClickPlay(Action e) {
 		playGame.setOnAction(action -> e.onAction());
 	}
+
 	public void setEventHandlers() {
 	}
-	
+
 }

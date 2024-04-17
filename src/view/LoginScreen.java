@@ -16,7 +16,9 @@ import javafx.scene.layout.VBox;
 import model.*;
 
 /**
- * A custom login screen layout for managing user authentication and account creation.
+ * A custom login screen layout for managing user authentication and account
+ * creation.
+ * 
  * @author Lucas Liang
  */
 public class LoginScreen extends BorderPane {
@@ -35,7 +37,7 @@ public class LoginScreen extends BorderPane {
 	private HBox passwordDetails;
 	private VBox loginPanel;
 	private VBox loginStatus;
-	
+
 	private Account account;
 
 	private Button makeAccount;
@@ -69,20 +71,20 @@ public class LoginScreen extends BorderPane {
 		status = new Label("Login first");
 		makeAccount = new Button("Create new Account");
 		loginPanel.getChildren().addAll(status, usernameDetails, passwordDetails, makeAccount);
-		usernameDetails.setPadding(new Insets(0,0,0,80));
-		passwordDetails.setPadding(new Insets(0,0,0,80));
-		loginPanel.setSpacing(10); 
+		usernameDetails.setPadding(new Insets(0, 0, 0, 80));
+		passwordDetails.setPadding(new Insets(0, 0, 0, 80));
+		loginPanel.setSpacing(10);
 		loginPanel.setAlignment(Pos.CENTER);
 		this.setCenter(loginPanel);
 
 	}
 
-    /**
-     * Adds event handlers for login, password typing, and logout actions.
-     *
-     * @param account The Account object associated with the login screen.
-     * @return none
-     */
+	/**
+	 * Adds event handlers for login, password typing, and logout actions.
+	 *
+	 * @param account The Account object associated with the login screen.
+	 * @return none
+	 */
 	public void addEventHandlers(Account account) {
 		login.setOnAction(e -> {
 			if (account.activeAccount() != null) {
@@ -91,8 +93,7 @@ public class LoginScreen extends BorderPane {
 			} else if (!account.login(accountName.getText(), curPW)) {
 				alert.setHeaderText("Invalid Login - Please Try Again");
 				alert.showAndWait();
-			} 
-			else {
+			} else {
 				accountName.setText("");
 				password.setText("");
 				curPW = "";
@@ -130,6 +131,6 @@ public class LoginScreen extends BorderPane {
 			password.setText("");
 			curPW = "";
 		});
-		
-}
+
+	}
 }

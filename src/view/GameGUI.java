@@ -1,4 +1,5 @@
 package view;
+
 import java.util.ArrayList;
 
 import javafx.application.Application;
@@ -11,9 +12,8 @@ import javafx.stage.Stage;
 import model.Game;
 import model.Theme;
 
-public class GameGUI extends Application{
-	
-	
+public class GameGUI extends Application {
+
 	private BorderPane all;
 	private StartScreen start;
 	private LoginScreen login;
@@ -22,12 +22,13 @@ public class GameGUI extends Application{
 	private SettingsPane settings;
 	private Button settingsButton = new Button("Settings");
 	private Button previousPane = new Button("Close Settings");
+
 	public void start(Stage primaryStage) throws Exception {
 		all = new BorderPane();
 		all.setMinHeight(700);
 		all.setMinWidth(600);
-		start = new StartScreen(650,560);
-		login = new LoginScreen(650,560);
+		start = new StartScreen(650, 560);
+		login = new LoginScreen(650, 560);
 		// TODO use web images for testing to not rely on uploading images to git
 		start = new StartScreen(start.getWidth(), start.getHeight());
 		stats = new StatsScreen(start.getWidth(), start.getHeight());
@@ -46,12 +47,13 @@ public class GameGUI extends Application{
 			previousPane.setOnAction(event -> all.setCenter(currentCenter));
 			all.setCenter(settings);
 		});
-		game.setOnGameEnd(() ->  all.setCenter(start));
+		game.setOnGameEnd(() -> all.setCenter(start));
 		start.setOnClickPlay(() -> {
 			all.setCenter(game);
 			game.newGame();
 		});
 	}
+
 	public static void main(String[] args) {
 		launch(args);
 	}
