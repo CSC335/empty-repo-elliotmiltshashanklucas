@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+
 import javafx.scene.image.Image;
 import view.Observer;
 
@@ -124,6 +126,9 @@ public class Theme {
 	public void setLightmode(boolean b) {
 		light = b;
 		notifyListeners();
+	}
+	public static Set<String> getThemes() {
+		return allThemes.keySet();
 	}
 
 	private static void setUpThemes() {
