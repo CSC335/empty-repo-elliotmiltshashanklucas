@@ -13,8 +13,8 @@ import model.AccountManager;
 import model.Game;
 import model.Theme;
 
-public class GameGUI extends Application {
-
+public class GameGUI extends Application{
+	private Canvas canvas;
 	private BorderPane all;
 	private StartScreen start;
 	private LoginScreen login;
