@@ -13,7 +13,7 @@ import model.AccountManager;
 import model.Game;
 import model.Theme;
 
-public class GameGUI extends Application{
+public class GameGUI extends Application {
 	private Canvas canvas;
 	private BorderPane all;
 	private StartScreen start;
@@ -47,7 +47,9 @@ public class GameGUI extends Application{
 		primaryStage.show();
 		settingsButton.setOnAction(e -> {
 			Node currentCenter = all.getCenter();
-			previousPane.setOnAction(event -> all.setCenter(currentCenter));
+			if (!(currentCenter.equals(settings))) {
+				previousPane.setOnAction(event -> all.setCenter(currentCenter));
+			}
 			all.setCenter(settings);
 		});
 		game.setOnGameEnd(() -> all.setCenter(start));

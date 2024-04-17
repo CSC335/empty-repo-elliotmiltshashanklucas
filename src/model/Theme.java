@@ -214,7 +214,7 @@ public class Theme {
 	private static void setUpThemes() {
 		// Cats Theme
 		Theme t = new Theme("Cats");
-		t.setBackground("backgroundImg.png");
+		t.setBackground("catsBackground.jpg");
 		t.addCard("cat1.png");
 		t.addCard("cat2.png");
 		t.addCard("cat3.png");
@@ -226,7 +226,7 @@ public class Theme {
 
 		// Dogs Theme
 		t = new Theme("Dogs");
-		t.setBackground("backgroundImg.png");
+		t.setBackground("doggyHeaven.jpg");
 		t.addCard("dogs11.png");
 		t.addCard("dogs12.png");
 		t.addCard("dogs13.png");
@@ -238,7 +238,7 @@ public class Theme {
 
 		// Planets Theme
 		t = new Theme("Planets");
-		t.setBackground("backgroundImg.png");
+		t.setBackground("planetsBackground.jpg");
 		t.addCard("mercury.jpg");
 		t.addCard("venus.jpg");
 		t.addCard("earth.jpg");
@@ -254,7 +254,7 @@ public class Theme {
 
 		// Fish Theme
 		t = new Theme("Fish");
-		t.setBackground("backgroundImg.png");
+		t.setBackground("fishBackground.jpg");
 		for (int i = 1; i <= 10; i++) {
 			t.addCard("fish" + i + ".jpeg");
 		}

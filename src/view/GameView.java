@@ -17,7 +17,7 @@ import model.Theme;
  */
 public class GameView extends BorderPane implements Observer {
 	private Game game;
-	private Theme theme = Theme.getTheme();
+	private Theme theme;
 	private GridPane board;
 	private Action onGameEnd = () -> {
 	}; // Placeholder for end-game action
@@ -33,6 +33,7 @@ public class GameView extends BorderPane implements Observer {
 		game = g;
 		Theme.addObserver(this);
 		newGame();
+		update();
 	}
 
 	/**
@@ -84,6 +85,8 @@ public class GameView extends BorderPane implements Observer {
 	@Override
 	public void update() {
 		theme = Theme.getTheme();
+		Image image = theme.getBackground();
+		this.setStyle("-fx-background-image: url('" + image.getUrl() + "');" + "-fx-background-size: cover;");
 	}
 
 }
