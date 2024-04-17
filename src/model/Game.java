@@ -6,7 +6,10 @@ import java.util.List;
 
 import view.Observer;
 
-public class Game implements Observer {
+/**
+ * The Game class represents the logic and state of a game.
+ */
+public class Game implements Observer{
 	private int rows;
 	private int cols;
 	private int numSets;
@@ -19,14 +22,26 @@ public class Game implements Observer {
 	private int setsFound = 0;
 	private int totalGuesses = 0;
 
+	/**
+     * Enumeration of game states.
+     */
 	public static enum state {
 		ALREADY_FACE_UP, NOT_ENOUGH_CARDS, NOT_A_MATCH, MATCH, END_OF_GAME
 	}
 
+	/**
+     * Enumeration of game difficulties.
+     */
 	public static enum difficulty {
 		EASY, MEDIUM, HARD
 	}
-
+	
+	/**
+     * Creates a new game with the specified difficulty.
+     *
+     * @param gameMode - the difficulty of the game
+     * @return a new Game object with the specified difficulty
+     */
 	public static Game makeGame(difficulty gameMode) {
 		switch (gameMode) {
 		case EASY:
@@ -37,17 +52,33 @@ public class Game implements Observer {
 			return new Game(3, 4, 2, 2);
 		}
 	}
+	/**
+     * Constructs a Game object with the specified parameters.
+     *
+     * @param r - the number of rows
+     * @param c - the number of columns
+     * @param ss - the size of a set
+     * @param m - the size of a match
+     */
+    protected Game(int r, int c, int ss, int m) {
+        Theme.addObserver(this);
+        rows = r;
+        cols = c;
+        setSize = ss;
+        matchSize = m;
+        numSets = rows * cols / setSize;
+        newGame();
+    }
 
-	protected Game(int r, int c, int ss, int m) {
-		Theme.addObserver(this);
-		rows = r;
-		cols = c;
-		setSize = ss;
-		matchSize = m;
-		numSets = rows * cols / setSize;
-		newGame();
-	}
-
+    /**
+     * Constructs a Game object with the specified parameters and theme.
+     *
+     * @param r - the number of rows
+     * @param c - the number of columns
+     * @param ss - the size of a set
+     * @param m - the size of a match
+     * @param t - the theme of the game
+     */
 	protected Game(int r, int c, int ss, int m, Theme t) {
 		Theme.addObserver(this);
 		rows = r;
@@ -59,6 +90,9 @@ public class Game implements Observer {
 		newGame();
 	}
 
+	/**
+     * Starts a new game by resetting game parameters and shuffling cards.
+     */
 	public void newGame() {
 		numClicked = 0;
 		setsFound = 0;
@@ -73,17 +107,25 @@ public class Game implements Observer {
 		}
 		Collections.shuffle(cards);
 	}
-
-	/*
-	 * private List<String> getCardIdentifiers(int pairCount) { List<String>
-	 * identifiers = new ArrayList<>(); theme.getImageStrings(numSets); for (int i =
-	 * 1; i <= pairCount; i++) { identifiers.add(String.valueOf(i)); } return
-	 * identifiers; }
-	 */
+	
+	/**
+     * Retrieves the card at the specified row and column.
+     *
+     * @param r - the row index
+     * @param c - the column index
+     * @return the card at the specified row and column
+     */
 	public Card getCard(int r, int c) {
 		return cards.get(r * cols + c);
 	}
 
+	/**
+     * Attempts to guess the card at the specified row and column.
+     *
+     * @param r - the row index
+     * @param c - the column index
+     * @return the state of the guess
+     */
 	public state guessCard(int r, int c) {
 		Card guess = cards.get(r * cols + c);
 		if (guess.isFlipped()) {
@@ -117,7 +159,11 @@ public class Game implements Observer {
 		}
 	}
 
-	// Changed the logic of the function
+	/**
+     * Checks if the current guesses form a match.
+     *
+     * @return true if the guesses form a match, false otherwise
+     */
 	private boolean checkGuesses() {
 		if (curGuesses.isEmpty()) {
 			return false;
@@ -131,6 +177,12 @@ public class Game implements Observer {
 		return true;
 	}
 
+	/**
+     * Flips the card at the specified index.
+     *
+     * @param cardIndex - the index of the card to flip
+     * @return the flipped card
+     */
 	public Card flipCard(int cardIndex) {
 		if (cardIndex >= 0 && cardIndex < cards.size()) {
 			Card selectedCard = cards.get(cardIndex);
@@ -142,18 +194,38 @@ public class Game implements Observer {
 		}
 	}
 
+	/**
+     * Checks if the game is over.
+     *
+     * @return true if the game is over, false otherwise
+     */
 	public boolean isGameOver() {
 		return numSets == setsFound;
 	}
-
+	
+	/**
+     * Retrieves the total number of guesses made.
+     *
+     * @return the total number of guesses made
+     */
 	public int totalGuesses() {
 		return totalGuesses;
 	}
 
+	/**
+     * Retrieves the number of sets found.
+     *
+     * @return the number of sets found
+     */
 	public int getNumSetsFound() {
 		return setsFound;
 	}
 
+	/**
+     * Sets the cards for testing purposes.
+     *
+     * @param testCards - the list of cards to set
+     */
 	public void setCards(List<Card> testCards) {
 		this.cards = testCards;
 		this.numClicked = 0;
@@ -162,6 +234,9 @@ public class Game implements Observer {
 
 	}
 
+	/**
+	 * Updates the game theme when theme changes.
+	 */
 	@Override
 	public void update() {
 		theme = Theme.getTheme();

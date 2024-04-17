@@ -10,6 +10,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import model.Theme;
 
 /**
  * A customized start screen layout containing a background image and a play
@@ -17,7 +18,7 @@ import javafx.scene.paint.Color;
  * 
  * @author Lucas Liang
  */
-public class StartScreen extends StackPane {
+public class StartScreen extends StackPane implements Observer{
 
 	private BackgroundImage backgroundImage;
 	private Button playGame;
@@ -26,9 +27,9 @@ public class StartScreen extends StackPane {
 		this.setWidth(d);
 		this.setHeight(e);
 		playGame = new Button("Play Game");
-		Image image = new Image("file:images/backgroundImg.png");
-		this.setStyle("-fx-background-image: url('" + image.getUrl() + "');" + "-fx-background-size: cover;");
 		this.getChildren().addAll(playGame);
+		this.update();
+		Theme.addObserver(this);
 	}
 
 	public void setOnClickPlay(Action e) {
@@ -36,6 +37,12 @@ public class StartScreen extends StackPane {
 	}
 
 	public void setEventHandlers() {
+	}
+
+	@Override
+	public void update() {
+		Image image = Theme.getTheme().getBackground();
+		this.setStyle("-fx-background-image: url('" + image.getUrl() + "');" + "-fx-background-size: cover;");
 	}
 
 }
