@@ -1,5 +1,6 @@
 package view;
 import java.util.ArrayList;
+import model.AccountManager;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -19,9 +20,9 @@ public class GameGUI extends Application{
 	private StatsScreen stats;
 	private GameView game;
 	public void start(Stage primaryStage) throws Exception {
-		
+		AccountManager accountManager = new AccountManager();
 		start = new StartScreen(650,560);
-		login = new LoginScreen(650,560);
+		login = new LoginScreen(accountManager, primaryStage);
 		Theme t = Theme.getTheme();
 		t.setCardBack("dogs10.png");
 		// TODO use web images for testing to not rely on uploading images to git
@@ -33,7 +34,6 @@ public class GameGUI extends Application{
 		start = new StartScreen(start.getWidth(), start.getHeight());
 		stats = new StatsScreen(start.getWidth(), start.getHeight());
 		game = new GameView(Game.makeGame(Game.difficulty.MEDIUM));
-		login = new LoginScreen(login.getWidth(), login.getHeight());
 		game = new GameView(Game.makeGame(Game.difficulty.MEDIUM));
 
 		Scene startScene = new Scene(start, 650, 560);
@@ -41,7 +41,7 @@ public class GameGUI extends Application{
 		Scene loginScene = new Scene(login, 500, 175);
 		Scene statsScene = new Scene(stats, 650,560);
 		statsScene.getStylesheets().add("styles.css");
-		primaryStage.setScene(statsScene);
+		primaryStage.setScene(loginScene);
 		primaryStage.show();
 		game.setOnGameEnd(() ->  primaryStage.setScene(startScene));
 		start.setOnClickPlay(() -> {

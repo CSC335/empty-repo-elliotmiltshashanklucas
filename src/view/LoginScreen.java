@@ -1,135 +1,207 @@
 package view;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
 import java.util.Optional;
-
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import model.*;
+import javafx.stage.Stage;
+import model.Account;
+import model.AccountManager;
 
-/**
- * A custom login screen layout for managing user authentication and account creation.
- * @author Lucas Liang
- */
 public class LoginScreen extends BorderPane {
-
-	private Label accountNameLabel;
-	private Label passwordLabel;
-
-	private TextField accountName;
-	private TextField password;
-
-	private Button login;
-	private Label status;
-	private Button logout;
-
+	private TextField usernameField = new TextField();
+	private PasswordField passwordField = new PasswordField();
+	private Button loginButton = new Button("Login");
+	private Label prompt = new Label("Login first");
+	private Button logoutButton = new Button("Logout");
+	private Label accountNameLabel = new Label("Account Name");
+	private Label passwordLabel = new Label("Password");
+	private Button createNewAccount = new Button("Create new Account");
 	private HBox usernameDetails;
 	private HBox passwordDetails;
 	private VBox loginPanel;
-	private VBox loginStatus;
-	
-	private Account account;
+	private AccountManager accounts;
+	private String STATE_FILE = "state.ser";
 
-	private Button makeAccount;
+	public LoginScreen(AccountManager a, Stage stage) {
+		accounts = a;
+		layoutGUI(650, 560);
+		setEventHandlers();
+		promptLoadState();
+		setUpCloseRequestHandler(stage);
+	}
 
-	private String curPW = "";
-
-	private Alert alert;
-
-	public LoginScreen(double d, double e) {
+	private void layoutGUI(double d, double e) {
 		this.setWidth(d);
 		this.setHeight(e);
-		alert = new Alert(AlertType.INFORMATION);
-
-		accountNameLabel = new Label("Account Name");
-		// make the labels even length
-		passwordLabel = new Label("Password         ");
-
-		accountName = new TextField();
-		password = new TextField();
-
 		usernameDetails = new HBox();
-		login = new Button("Login");
-		usernameDetails.getChildren().addAll(accountNameLabel, accountName, login);
+		usernameDetails.getChildren().addAll(accountNameLabel, usernameField, loginButton);
 		usernameDetails.setSpacing(10);
 		passwordDetails = new HBox();
-		logout = new Button("Logout");
-		passwordDetails.getChildren().addAll(passwordLabel, password, logout);
+		passwordDetails.getChildren().addAll(passwordLabel, passwordField, logoutButton);
 		passwordDetails.setSpacing(10);
-
 		loginPanel = new VBox();
-		status = new Label("Login first");
-		makeAccount = new Button("Create new Account");
-		loginPanel.getChildren().addAll(status, usernameDetails, passwordDetails, makeAccount);
-		usernameDetails.setPadding(new Insets(0,0,0,80));
-		passwordDetails.setPadding(new Insets(0,0,0,80));
-		loginPanel.setSpacing(10); 
+		loginPanel.getChildren().addAll(prompt, usernameDetails, passwordDetails, createNewAccount);
+		usernameDetails.setPadding(new Insets(0, 0, 0, 80));
+		passwordDetails.setPadding(new Insets(0, 0, 0, 107));
+		loginPanel.setSpacing(10);
 		loginPanel.setAlignment(Pos.CENTER);
 		this.setCenter(loginPanel);
 
 	}
 
-    /**
-     * Adds event handlers for login, password typing, and logout actions.
-     *
-     * @param account The Account object associated with the login screen.
-     * @return none
-     */
-	public void addEventHandlers(Account account) {
-		login.setOnAction(e -> {
-			if (account.activeAccount() != null) {
-				alert.setHeaderText("Please Logout First");
-				alert.showAndWait();
-			} else if (!account.login(accountName.getText(), curPW)) {
-				alert.setHeaderText("Invalid Login - Please Try Again");
-				alert.showAndWait();
-			} 
-			else {
-				accountName.setText("");
-				password.setText("");
-				curPW = "";
-			}
-		});
+	private void promptLoadState() {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setHeaderText("Load Saved State");
+		alert.setContentText("Click OK read from a .ser file");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.isPresent() && result.get() == ButtonType.OK) {
+			readState();
+		}
+	}
 
-		password.setOnKeyTyped(e -> {
-			String in = password.getText();
-			if (in.length() > curPW.length()) {
-				curPW += in.substring(curPW.length());
-				password.replaceText(in.length() - 1, in.length(), "\u2022");
+	private void setUpCloseRequestHandler(Stage stage) {
+		stage.setOnCloseRequest(event -> {
+			event.consume();
+
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+			alert.setHeaderText("Save Changes");
+			alert.setContentText("Click OK to save current state before exiting");
+
+			Optional<ButtonType> result = alert.showAndWait();
+
+			if (result.isPresent() && result.get() == ButtonType.OK) {
+				writeState();
+			}
+			Platform.exit();
+			System.exit(0);
+		});
+	}
+
+	private void setEventHandlers() {
+		loginButton.setOnAction(e -> {
+			String user = getUsername();
+			String pass = getPassword();
+			if (user.isEmpty() || pass.isEmpty()) {
+				setPrompt("Username and password cannot be empty.");
+				return;
+			}
+			if (accounts.login(user, pass)) {
+				setPrompt("Logged in successfully.");
+				updateUIPostLogin();
 			} else {
-				curPW = curPW.substring(0, in.length());
+				setPrompt("Invalid Credentials");
 			}
 		});
 
-		password.setOnAction(e -> {
-			if (account.activeAccount() != null) {
-				alert.setHeaderText("Please Logout First");
-				alert.showAndWait();
-			} else if (!account.login(accountName.getText(), curPW)) {
-				alert.setHeaderText("Invalid Login - Please Try Again");
-				alert.showAndWait();
+		logoutButton.setOnAction(e -> {
+			if (accounts.userIsLoggedIn()) {
+				accounts.loggedOut();
+				setPrompt("Logged out successfully.");
+				updateUIPostLogout();
 			} else {
-				accountName.setText("");
-				password.setText("");
-				curPW = "";
+				setPrompt("No user is currently logged in.");
 			}
 		});
 
-		logout.setOnAction(e -> {
-			account.logout();
-			status.setText("Login first");
-			accountName.setText("");
-			password.setText("");
-			curPW = "";
+		createNewAccount.setOnAction(e -> {
+			String user = getUsername();
+			String pass = getPassword();
+			if (user.isEmpty() || pass.isEmpty()) {
+				setPrompt("Username and password cannot be empty.");
+				return;
+			}
+			if (accounts.createAccount(user, pass)) {
+				setPrompt("Account created, please login.");
+			} else {
+				setPrompt("Account name already taken");
+			}
 		});
-		
-}
+	}
+
+	private void updateUIPostLogin() {
+		loginButton.setDisable(true);
+		logoutButton.setDisable(false);
+		createNewAccount.setDisable(true);
+	}
+
+	private void updateUIPostLogout() {
+		loginButton.setDisable(false);
+		logoutButton.setDisable(true);
+		createNewAccount.setDisable(false);
+	}
+
+	private void readState() {
+		File file = new File(STATE_FILE);
+		if (!file.exists()) {
+			System.out.println("No saved state file found. Starting with a new state.");
+			return;
+		}
+
+		try (FileInputStream rawBytes = new FileInputStream(file);
+				ObjectInputStream inFile = new ObjectInputStream(rawBytes)) {
+
+			HashMap<String, Account> fileAccounts = (HashMap<String, Account>) inFile.readObject();
+			accounts.getAccounts().putAll(fileAccounts);
+
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void writeState() {
+		HashMap<String, Account> acc = accounts.getAccounts();
+		try {
+			FileOutputStream bytesToDisk = new FileOutputStream(STATE_FILE);
+			ObjectOutputStream outFile = new ObjectOutputStream(bytesToDisk);
+			outFile.writeObject(acc);
+			outFile.close();
+		} catch (IOException ioe) {
+			System.out.println("Writing objects failed");
+		}
+	}
+
+	public Button getLoginButton() {
+		return loginButton;
+	}
+
+	public Button getLogoutButton() {
+		return logoutButton;
+	}
+
+	public String getUsername() {
+		return usernameField.getText();
+	}
+
+	public String getPassword() {
+		return passwordField.getText();
+	}
+
+	public void setPrompt(String s) {
+		prompt.setText(s);
+	}
+
+	public boolean isLoggedIn() {
+		return accounts.userIsLoggedIn();
+	}
+
+	public Account getCurrentUser() {
+		return accounts.getLoggedInAccount();
+	}
 }

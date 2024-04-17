@@ -8,21 +8,25 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-
+/*
+ * author: Shashank Raj Pitla
+ * This class tests all the methods implemented in Game class 
+ */
 public class GameTest {
-
+		// Initialize the class
 		private class GameTestable extends Game{
 			public GameTestable(int r, int c, int ss, int m, Theme t) {
 				super(r, c, ss, m, t);
 				
 			}
 		}
+		// Initialize the them
 		private class TestTheme extends Theme{
 			public TestTheme(String n) {
 				super(n);
 				// TODO Auto-generated constructor stub
 			}
-
+			// Generating image string to test 
 			@Override 
 			public List<String> getImageStrings(int numSets){
 				List<String> images = new ArrayList<>();
@@ -39,14 +43,19 @@ public class GameTest {
 		public void setUp() {
 			testTheme = new TestTheme("a");
 		}
-		
+		/*
+		 * Testing for the number of sets found
+		 */
 		@Test
 		public void testGameSetup() {
 			Game game = new GameTestable(4, 3, 2, 2, testTheme);
 			assertNotNull(game);
 			assertEquals(0, game.getNumSetsFound());
 	}
-
+		/*
+		 * Testing for the cards present in GuessCard method
+		 * which is responsible for the handling of the logic
+		 */
 		@Test
 		public void testGuessCard() {
 			Game game = new GameTestable(4, 3, 2, 2, testTheme);
@@ -58,7 +67,7 @@ public class GameTest {
 			game.setCards(testCards);
 			assertEquals(Game.state.NOT_ENOUGH_CARDS, game.guessCard(0, 0));
 		}
-		//Using it as a refernce to test
+		//Using it as a reference to test
 		/*
 		public void setMatchingCards(boolean matching) {
 			List<Card> testCards = new ArrayList<>();
@@ -71,6 +80,12 @@ public class GameTest {
 			}
 		}
 		*/
+		
+		/*
+		 * Testing for matching card logic in guess card
+		 * which is important to see if the cards are a match
+		 * by comparing the strings of their images
+		 */
 		@Test
 		public void testGuessCard1() {
 		    Game game = new GameTestable(4, 3, 2, 2, testTheme);
