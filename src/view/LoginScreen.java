@@ -38,6 +38,7 @@ public class LoginScreen extends BorderPane {
 	private HBox passwordDetails;
 	private VBox loginPanel;
 	private AccountManager accounts;
+	private Action onLogin = () -> {};
 	private String STATE_FILE = "state.ser";
 
 	public LoginScreen(AccountManager a, Stage stage) {
@@ -148,6 +149,7 @@ public class LoginScreen extends BorderPane {
 		loginButton.setDisable(true);
 		logoutButton.setDisable(false);
 		createNewAccount.setDisable(true);
+		onLogin.onAction();
 	}
 
 	private void updateUIPostLogout() {
@@ -212,6 +214,10 @@ public class LoginScreen extends BorderPane {
 
 	public Account getCurrentUser() {
 		return accounts.getLoggedInAccount();
+	}
+	
+	public void setOnLogin(Action loginAction) {
+		this.onLogin = loginAction;
 	}
 
 

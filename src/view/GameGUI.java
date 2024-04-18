@@ -46,6 +46,7 @@ public class GameGUI extends Application {
 		Scene scene = new Scene(all);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		login.setOnLogin(() -> all.setCenter(start));
 		settingsButton.setOnAction(e -> {
 			Node currentCenter = all.getCenter();
 			if (!(currentCenter.equals(settings))) {
