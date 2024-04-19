@@ -11,7 +11,15 @@ import view.Observer;
  */
 public class Game implements Observer{
 	private int rows;
+	public int getRows() {
+		return rows;
+	}
+
 	private int cols;
+	public int getCols() {
+		return cols;
+	}
+
 	private int numSets;
 	private int setSize;
 	private int matchSize;

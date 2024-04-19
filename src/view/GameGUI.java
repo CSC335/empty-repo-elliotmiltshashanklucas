@@ -33,26 +33,34 @@ public class GameGUI extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		accounts = new AccountManager();
 		all = new BorderPane();
-		all.setMinHeight(700);
-		all.setMinWidth(600);
+		all.setMinHeight(CENTER_HEIGHT + 50);
+		all.setMinWidth(CENTER_WIDTH + 50);
 		start = new StartScreen(CENTER_WIDTH, CENTER_HEIGHT);
 		login = new LoginScreen(accounts, primaryStage);
-		// TODO use web images for testing to not rely on uploading images to git
-		start = new StartScreen(CENTER_WIDTH, CENTER_HEIGHT);
 		stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT);
-		settings = new Settings();
-		game = new GameView(
-			Game.makeGame(settings)
-		);
-		
-		settingsView = new SettingsPane(650, 560, settings);
 		stats.getStylesheets().add("styles.css");
-		all.setTop(settingsButton);
 		all.setCenter(login);
 		Scene scene = new Scene(all);
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		login.setOnLogin(() -> all.setCenter(start));
+		setEventHandlers();
+	}
+
+	private void setEventHandlers() {
+		login.setOnLogin(() -> {
+			all.setCenter(start);
+			settings = accounts.getLoggedInAccount().getPrefferedSettings();
+			Theme.setTheme(settings.getPrefferedTheme());
+			game = new GameView(Game.makeGame(settings));
+			game.setOnGameEnd(() -> all.setCenter(start));
+			settingsView = new SettingsPane(CENTER_WIDTH, CENTER_HEIGHT, settings);
+			settingsView.setOnChange(() -> {
+				game.newGame(Game.makeGame(settings));
+				System.out.println(accounts.getLoggedInAccount().getPrefferedSettings().getDifficulty());
+				
+				});
+			all.setTop(settingsButton);
+		});
 		settingsButton.setOnAction(e -> {
 			Node currentCenter = all.getCenter();
 			all.setTop(previousPane);
@@ -64,11 +72,12 @@ public class GameGUI extends Application {
 			}
 			all.setCenter(settingsView);
 		});
-		game.setOnGameEnd(() -> all.setCenter(start));
-		settingsView.setOnChange(() -> game.newGame(Game.makeGame(settings)));
+
+
 		start.setOnClickPlay(() -> {
 			all.setCenter(game);
 			game.newGame(Game.makeGame(settings));
+			accounts.getLoggedInAccount().setPrefferedSettings(settings);
 		});
 	}
 

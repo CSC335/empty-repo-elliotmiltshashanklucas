@@ -8,36 +8,22 @@ public class Account implements Serializable{
 	private static final long serialVersionUID = 5305138822007823784L;
 	private static Map<String, Account> accountInfo = new HashMap<>();
     private String userName;
-    private String password; 
+    private String password;
+    private Settings prefferedSettings;
     
-    public Account(String userName, String password) {
+    public Settings getPrefferedSettings() {
+		return prefferedSettings;
+	}
+
+	public Account(String userName, String password, Settings settings) {
         this.userName = userName;
         this.password = password;
+        prefferedSettings = settings;
     }
-
-    public static boolean createAccount(String userName, String password) {
-        if (userName == null || userName.isEmpty()) {
-            System.out.println("Username cannot be empty");
-            return false;
-        }
-        if (password == null || password.isEmpty()) {
-            System.out.println("Password cannot be empty");
-            return false;
-        }
-        if (accountInfo.containsKey(userName)) {
-            System.out.println("Username is already taken");
-            return false;
-        }
-        accountInfo.put(userName, new Account(userName, password));
-        System.out.println("Account created");
-        return true;
+    
+    public void setPrefferedSettings(Settings s) {
+    	prefferedSettings = s;
     }
-
-
-	public void logout() {
-		// TODO Auto-generated method stub
-
-	}
 
     public String getUserName() {
         return userName;

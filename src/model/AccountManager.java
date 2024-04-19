@@ -27,9 +27,11 @@ public class AccountManager {
 	public void loggedOut() {
 		loggedInAccount = null;
 	}
+	
 	public Account getLoggedInAccount() {
 		return loggedInAccount;
 	}
+
 
     public boolean createAccount(String userName, String password) {
         if (userName == null || userName.isEmpty()) {
@@ -44,7 +46,7 @@ public class AccountManager {
             System.out.println("Username is already taken");
             return false;
         }
-        accounts.put(userName, new Account(userName, password));
+        accounts.put(userName, new Account(userName, password, new Settings()));
         System.out.println("Account created");
         return true;
     }
