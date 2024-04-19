@@ -164,6 +164,7 @@ public class Game implements Observer{
 					if (setsFound < numSets) {
 						return state.MATCH;
 					} else {
+						//END OF GAME ACTIONS
 						return state.END_OF_GAME;
 					}
 				}
