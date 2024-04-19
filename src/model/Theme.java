@@ -221,7 +221,7 @@ public class Theme {
 		t.addCard("cat4.png");
 		t.addCard("cat5.png");
 		t.addCard("cat6.png");
-		t.setCardBack("dogs10.png");
+		t.setCardBack("catCardBack.png");
 		allThemes.put("Cats", t);
 
 		// Dogs Theme
@@ -233,7 +233,7 @@ public class Theme {
 		t.addCard("dogs14.png");
 		t.addCard("dogs15.png");
 		t.addCard("dogs16.png");
-		t.setCardBack("cat21.png");
+		t.setCardBack("dogCardBack.png");
 		allThemes.put("Dogs", t);
 
 		// Planets Theme
