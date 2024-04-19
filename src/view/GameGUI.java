@@ -24,22 +24,26 @@ public class GameGUI extends Application {
 	private Settings settings;
 	private SettingsPane settingsView;
 	private AccountManager accounts;
-
 	private Button settingsButton = new Button("Settings");
 	private Button previousPane = new Button("Close Settings");
+	
+	private final double CENTER_WIDTH = 650;
+	private final double CENTER_HEIGHT = 560;
 
 	public void start(Stage primaryStage) throws Exception {
 		accounts = new AccountManager();
 		all = new BorderPane();
 		all.setMinHeight(700);
 		all.setMinWidth(600);
-		start = new StartScreen(650, 560);
-
+		start = new StartScreen(CENTER_WIDTH, CENTER_HEIGHT);
 		login = new LoginScreen(accounts, primaryStage);
 		// TODO use web images for testing to not rely on uploading images to git
-		start = new StartScreen(start.getWidth(), start.getHeight());
-		stats = new StatsScreen(start.getWidth(), start.getHeight());
-		game = new GameView(Game.makeGame(Game.Difficulty.MEDIUM));
+		start = new StartScreen(CENTER_WIDTH, CENTER_HEIGHT);
+		stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT);
+		settings = new Settings();
+		game = new GameView(
+			Game.makeGame(settings)
+		);
 		
 		settingsView = new SettingsPane(650, 560, settings);
 		stats.getStylesheets().add("styles.css");
@@ -61,9 +65,10 @@ public class GameGUI extends Application {
 			all.setCenter(settingsView);
 		});
 		game.setOnGameEnd(() -> all.setCenter(start));
+		settingsView.setOnChange(() -> game.newGame(Game.makeGame(settings)));
 		start.setOnClickPlay(() -> {
 			all.setCenter(game);
-			game.newGame();
+			game.newGame(Game.makeGame(settings));
 		});
 	}
 

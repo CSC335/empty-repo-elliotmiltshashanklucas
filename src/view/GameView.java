@@ -30,9 +30,8 @@ public class GameView extends BorderPane implements Observer {
 	 */
 	public GameView(Game g) {
 		super();
-		game = g;
 		Theme.addObserver(this);
-		newGame();
+		newGame(g);
 		update();
 	}
 
@@ -40,8 +39,8 @@ public class GameView extends BorderPane implements Observer {
 	 * Starts a new game by resetting the game model and updating the GUI layout and
 	 * event handlers.
 	 */
-	public void newGame() {
-		game.newGame();
+	public void newGame(Game newGame) {
+		game = newGame;
 		layoutGUI();
 		addEventHandlers();
 	}

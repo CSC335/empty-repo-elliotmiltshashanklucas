@@ -1,14 +1,10 @@
 package view;
 
-import java.util.ArrayList;
-import java.util.stream.Stream;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import model.Game;
 import model.Settings;
@@ -28,6 +24,11 @@ public class SettingsPane extends BorderPane implements Observer {
 	private ObservableList<Game.Difficulty> gamemode = FXCollections.observableArrayList();
 	private ListView<Game.Difficulty> gamemodeView = new ListView<>();
 	private Button selectGamemode = new Button("Select Game Mode");
+	private Action onChange = () -> {};
+	public void setOnChange(Action onChange) {
+		this.onChange = onChange;
+	}
+
 	/**
 	 * Constructs a new SettingsPane. Initializes the theme selection ListView and
 	 * select button, and registers this pane as an observer of the Theme model.
@@ -38,7 +39,15 @@ public class SettingsPane extends BorderPane implements Observer {
 		setHeight(height);
 		setWidth(width);
 		layoutGUI();
-		selectTheme.setOnAction(e -> Theme.setTheme(themeView.getSelectionModel().getSelectedItem()));
+		settings = s;
+		selectTheme.setOnAction(e -> {
+			settings.setPrefferedTheme(themeView.getSelectionModel().getSelectedItem());
+			onChange.onAction();
+		});
+		selectGamemode.setOnAction(e-> {
+			settings.setDifficulty(gamemodeView.getSelectionModel().getSelectedItem());
+			onChange.onAction();
+		});
 		
 	}
 

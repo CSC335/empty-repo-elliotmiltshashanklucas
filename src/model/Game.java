@@ -21,7 +21,9 @@ public class Game implements Observer{
 	private int numClicked = 0;
 	private int setsFound = 0;
 	private int totalGuesses = 0;
-
+	static final public int DEFAULT_COLS = 4;
+	static final public int DEFAULT_ROWS = 3;
+	
 	/**
      * Enumeration of game states.
      */
@@ -42,14 +44,16 @@ public class Game implements Observer{
      * @param gameMode - the difficulty of the game
      * @return a new Game object with the specified difficulty
      */
-	public static Game makeGame(Difficulty gameMode) {
-		switch (gameMode) {
+	public static Game makeGame(Settings settings) {
+		int rows = settings.getRows();
+		int cols = settings.getColumns();
+		switch (settings.getDifficulty()) {
 		case EASY:
-			return new Game(3, 4, 4, 2);
+			return new Game(rows, cols, 4, 2);
 		case HARD:
-			return new Game(3, 4, 3, 3);
+			return new Game(rows, cols, 3, 3);
 		default:
-			return new Game(3, 4, 2, 2);
+			return new Game(rows, cols, 2, 2);
 		}
 	}
 	/**
