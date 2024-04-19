@@ -32,7 +32,7 @@ public class Game implements Observer{
 	/**
      * Enumeration of game difficulties.
      */
-	public static enum difficulty {
+	public static enum Difficulty {
 		EASY, MEDIUM, HARD
 	}
 	
@@ -42,7 +42,7 @@ public class Game implements Observer{
      * @param gameMode - the difficulty of the game
      * @return a new Game object with the specified difficulty
      */
-	public static Game makeGame(difficulty gameMode) {
+	public static Game makeGame(Difficulty gameMode) {
 		switch (gameMode) {
 		case EASY:
 			return new Game(3, 4, 4, 2);

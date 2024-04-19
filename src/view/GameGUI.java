@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.AccountManager;
 import model.Game;
+import model.Settings;
 import model.Theme;
 
 public class GameGUI extends Application {
@@ -20,7 +21,8 @@ public class GameGUI extends Application {
 	private LoginScreen login;
 	private StatsScreen stats;
 	private GameView game;
-	private SettingsPane settings;
+	private Settings settings;
+	private SettingsPane settingsView;
 	private AccountManager accounts;
 
 	private Button settingsButton = new Button("Settings");
@@ -37,9 +39,9 @@ public class GameGUI extends Application {
 		// TODO use web images for testing to not rely on uploading images to git
 		start = new StartScreen(start.getWidth(), start.getHeight());
 		stats = new StatsScreen(start.getWidth(), start.getHeight());
-		game = new GameView(Game.makeGame(Game.difficulty.MEDIUM));
-		settings = new SettingsPane();
-		settings.setTop(previousPane);
+		game = new GameView(Game.makeGame(Game.Difficulty.MEDIUM));
+		
+		settingsView = new SettingsPane(650, 560, settings);
 		stats.getStylesheets().add("styles.css");
 		all.setTop(settingsButton);
 		all.setCenter(login);
@@ -49,10 +51,14 @@ public class GameGUI extends Application {
 		login.setOnLogin(() -> all.setCenter(start));
 		settingsButton.setOnAction(e -> {
 			Node currentCenter = all.getCenter();
-			if (!(currentCenter.equals(settings))) {
-				previousPane.setOnAction(event -> all.setCenter(currentCenter));
+			all.setTop(previousPane);
+			if (!(currentCenter.equals(settingsView))) {
+				previousPane.setOnAction(event -> {
+					all.setTop(settingsButton);
+					all.setCenter(currentCenter);
+				});
 			}
-			all.setCenter(settings);
+			all.setCenter(settingsView);
 		});
 		game.setOnGameEnd(() -> all.setCenter(start));
 		start.setOnClickPlay(() -> {
