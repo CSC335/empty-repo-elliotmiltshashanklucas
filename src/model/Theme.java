@@ -249,7 +249,7 @@ public class Theme {
 		t.addCard("neptune.jpg");
 		t.addCard("pluto.jpg");
 		t.addCard("moon.jpg");
-		t.setCardBack("planetsCardBack.png");
+		t.setCardBack("planetCardBack.png");
 		allThemes.put("Planets", t);
 
 		// Fish Theme

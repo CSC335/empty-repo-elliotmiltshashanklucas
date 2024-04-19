@@ -1,5 +1,6 @@
 package view;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
@@ -56,11 +57,12 @@ public class GameView extends BorderPane implements Observer {
 
 	private void layoutGUI() {
 		board = new GridPane();
+		board.setAlignment(Pos.CENTER);
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 4; j++)
 				board.add(new CardView(game.getCard(i, j)), j, i);
-		board.setHgap(5);
-		board.setVgap(5);
+		board.setHgap(10);
+		board.setVgap(10);
 		this.setCenter(board);
 		board.setMinHeight(500);
 	}

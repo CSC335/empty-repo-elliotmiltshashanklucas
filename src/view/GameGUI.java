@@ -27,8 +27,8 @@ public class GameGUI extends Application {
 	private Button settingsButton = new Button("Settings");
 	private Button previousPane = new Button("Close Settings");
 	
-	private final double CENTER_WIDTH = 650;
-	private final double CENTER_HEIGHT = 560;
+	private final double CENTER_WIDTH = 900;
+	private final double CENTER_HEIGHT = 600;
 
 	public void start(Stage primaryStage) throws Exception {
 		accounts = new AccountManager();

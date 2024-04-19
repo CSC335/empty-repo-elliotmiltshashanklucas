@@ -29,8 +29,8 @@ public class CardView extends ImageView implements Observer {
 	public CardView(Card c) {
 		card = c;
 		c.addListener(this);
-		this.setFitHeight(100);
-		this.setFitWidth(100);
+		this.setFitHeight(140);
+		this.setFitWidth(120);
 		updateImage(card.isFlipped());
 		Theme.addObserver(this);
 	}
