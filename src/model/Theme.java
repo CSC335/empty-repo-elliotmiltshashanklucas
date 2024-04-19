@@ -258,7 +258,7 @@ public class Theme {
 		for (int i = 1; i <= 10; i++) {
 			t.addCard("fish" + i + ".jpeg");
 		}
-		t.setCardBack("fishCardBack.jpg");
+		t.setCardBack("fishCardBack.png");
 		allThemes.put("Fish", t);
 
 		// Jungle Theme
@@ -267,7 +267,7 @@ public class Theme {
 		for (int i = 1; i <= 10; i++) {
 			t.addCard("jungle" + i + ".jpg");
 		}
-		t.setCardBack("jungleCardBack.jpg");
+		t.setCardBack("jungleCardBack.png");
 		allThemes.put("Jungle", t);
 
 		currentTheme = allThemes.get("Cats");
