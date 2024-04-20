@@ -1,6 +1,7 @@
 package view;
 
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
@@ -77,6 +78,16 @@ public class GameView extends BorderPane implements Observer {
 		board.add(timerLabel, 4, 4);
 		board.setMinHeight(500);
 		startTimer();
+		Thread timerThread = new Thread(()->{
+		while (true) {
+			Platform.runLater(()->updateTimer());
+		try {
+			Thread.sleep(200);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}});
+		timerThread.start();
 	}
 
 	private void addEventHandlers() {
@@ -118,7 +129,6 @@ public class GameView extends BorderPane implements Observer {
 		theme = Theme.getTheme();
 		Image image = theme.getBackground();
 		this.setStyle("-fx-background-image: url('" + image.getUrl() + "');" + "-fx-background-size: cover;");
-		updateTimer();
 	}
 
 }
