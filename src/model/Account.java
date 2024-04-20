@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,28 @@ public class Account implements Serializable{
     public boolean correctPassword(String inputPassword) {
     	return (this.password.equals(inputPassword));
     }
+    
+    public Map<Game.Difficulty, List<GameStats>> getHistory(){
+    	return this.gameHistory;
+    }
+    
+    /*
+     * For testing only
+     */
+    
+    public void makeHistory() {
+    	gameHistory = new HashMap<>();
+    }
+    public void addGameData(int numGuesses, double numSeconds, 
+    		Game.Difficulty difficulty, int numberOfCards ) 
+    {
+    	if(!gameHistory.containsKey(difficulty)) {
+    		gameHistory.put(difficulty, new ArrayList<GameStats>());
+    	}
+    	GameStats g = new GameStats(numGuesses, numSeconds, difficulty, numberOfCards);
+    	gameHistory.get(difficulty).add(g);
+    }
+    
 }
 
 

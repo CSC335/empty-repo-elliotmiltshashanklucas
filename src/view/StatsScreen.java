@@ -2,6 +2,14 @@ package view;
 
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javafx.geometry.Insets;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -10,6 +18,9 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import model.Account;
+import model.AccountManager;
+import model.Game;
+import model.GameStats;
 
 /**
  * A customized grid layout for displaying statistical information related to a
@@ -20,7 +31,7 @@ import model.Account;
 
 public class StatsScreen extends GridPane {
 
-	private Account account;
+	private AccountManager accountManager;
 
 	private Label bestEasyScore;
 
@@ -39,10 +50,10 @@ public class StatsScreen extends GridPane {
 	private VBox labels;
 
 	// Account a
-	public StatsScreen(double width, double height) {
+	public StatsScreen(double width, double height, AccountManager a) {
 		this.setWidth(width);
 		this.setHeight(height);
-		// this.account = a;
+		this.accountManager = a;
 		compToAverage();
 		showBest();
 		getRecent();
@@ -133,5 +144,72 @@ public class StatsScreen extends GridPane {
 		this.getChildren().add(lineChart);
 
 	}
-
+	
+	/**
+	 * Takes in a difficulty value and finds the average number of clicks for 
+	 * all users on this difficulty
+	 * @param difficulty	the enum difficulty to search for
+	 * @return		average number of clicks it took a user to win on this difficulty
+	 */
+	private Integer findAverage(Game.Difficulty difficulty) {
+		Map<String, Account> accounts = accountManager.getAccounts();
+		Integer score = 0;
+		Integer entries = 0;
+		for(Map.Entry<String, Account> entry : accounts.entrySet()) {
+			Account a = entry.getValue();
+			if(!(a.getHistory().containsKey(difficulty))) {
+				continue;
+			}
+			else {
+				for(GameStats g: a.getHistory().get(difficulty)) {
+					score += g.getNumClicks();
+					entries += 1;	
+				}
+			}
+		}
+		return (score / entries);
+				}
+	
+	/**
+	 * Takes in a difficulty enum and returns the lowest score achieved by the user for 
+	 * this difficulty
+	 * @param d		the enum difficulty to search for
+	 * @return		lowest score if exists else -1
+	 */
+	private Integer findBest(Game.Difficulty d) {
+		
+		Account activeAccount = accountManager.getLoggedInAccount();
+		if(activeAccount.getHistory().containsKey(d)) {
+			List<GameStats> stats = activeAccount.getHistory().get(d);
+			Integer min = Integer.MAX_VALUE;
+			for(GameStats g: stats) {
+				if(g.getNumClicks() < min) {
+					min = g.getNumClicks();
+				}
+			}
+			return min;
+		}
+		else {
+			return -1;
+		}
+		
+	}
+	/**
+	 * Takes in a difficulty enum and returns the most recent 5 game scores for this 
+	 * user and difficulty
+	 * @param d		the enum difficulty to search for
+	 * @return		5 most recent scores, -1 initialized if does not exist.
+	 */
+	private List<Integer> getRecent(Game.Difficulty d){
+		List<Integer> recent = new ArrayList<Integer>(Collections.nCopies(5, -1));
+		Account activeAccount = accountManager.getLoggedInAccount();
+		if(activeAccount.getHistory().containsKey(d)) {
+			List<GameStats> stats = activeAccount.getHistory().get(d);
+			for(int i = 0; i < 5; i++) {
+				recent.set(i, stats.get(i).getNumClicks());
+			}
+		}
+		return recent;
+		
+	}
 }
