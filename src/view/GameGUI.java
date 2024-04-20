@@ -3,6 +3,7 @@ package view;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -37,8 +38,11 @@ public class GameGUI extends Application {
 		all.setMinWidth(CENTER_WIDTH + 50);
 		start = new StartScreen(CENTER_WIDTH, CENTER_HEIGHT);
 		login = new LoginScreen(accounts, primaryStage);
+		/*
+		 * need to change when this gets instantiated (account null)
 		stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT,accounts);
 		stats.getStylesheets().add("styles.css");
+		*/
 		all.setCenter(login);
 		Scene scene = new Scene(all);
 		primaryStage.setScene(scene);
@@ -52,7 +56,14 @@ public class GameGUI extends Application {
 			settings = accounts.getLoggedInAccount().getPrefferedSettings();
 			Theme.setTheme(settings.getPrefferedTheme());
 			game = new GameView(Game.makeGame(settings));
-			game.setOnGameEnd(() -> all.setCenter(start));
+			game.setOnGameEnd(() -> {
+				
+			System.out.println(game.getEndTime() + "\n");
+			Platform.runLater(()->{
+				
+			all.setCenter(start);
+			});
+			});
 			settingsView = new SettingsPane(CENTER_WIDTH, CENTER_HEIGHT, settings);
 			settingsView.setOnChange(() -> {
 				game.newGame(Game.makeGame(settings));

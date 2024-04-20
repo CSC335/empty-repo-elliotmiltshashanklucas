@@ -27,7 +27,6 @@ public class GameView extends BorderPane implements Observer {
 	private GridPane board;
     private long startTime;
     private Label timerLabel;
-    private AnimationTimer timer; 
 	private Action onGameEnd = () -> {
 	}; // Placeholder for end-game action
 
@@ -120,6 +119,14 @@ public class GameView extends BorderPane implements Observer {
                 timerLabel.setText(timeString);
 	}
 
+	
+	public Long getEndTime() {
+		long now = System.nanoTime();
+		long elapsedTimeNs = now - startTime;
+        long elapsedSeconds = elapsedTimeNs / 1_000_000_000;
+
+        return elapsedSeconds;
+	}
 	/**
 	 * Updates the view to reflect the current theme settings when a theme change
 	 * occurs.

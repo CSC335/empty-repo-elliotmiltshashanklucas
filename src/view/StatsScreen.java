@@ -49,7 +49,6 @@ public class StatsScreen extends GridPane {
 
 	private VBox labels;
 
-	// Account a
 	public StatsScreen(double width, double height, AccountManager a) {
 		this.setWidth(width);
 		this.setHeight(height);
