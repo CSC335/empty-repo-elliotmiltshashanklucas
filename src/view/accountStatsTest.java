@@ -28,6 +28,12 @@ public class accountStatsTest extends Application {
 	a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
 	a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
 	a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
+	am.loggedOut();
+	am.login("b", "2");
+	Account b = am.getLoggedInAccount();
+	b.makeHistory();
+	b.addGameData(20, 23, Game.Difficulty.MEDIUM, 12);
+	b.addGameData(12, 23, Game.Difficulty.MEDIUM, 12);
 	
 	}
 
@@ -35,8 +41,8 @@ public class accountStatsTest extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		all = new BorderPane();
 		am = new AccountManager();
-		stats = new StatsScreen(900, 600, am);
 		addData();
+		stats = new StatsScreen(900, 600, am);
 		all.setCenter(stats);
 		Scene scene = new Scene(all);
 		primaryStage.setScene(scene);

@@ -56,7 +56,7 @@ public class StatsScreen extends GridPane {
 		this.accountManager = a;
 		compToAverage();
 		showBest();
-		getRecent();
+		plotRecent();
 	}
 
 	/**
@@ -76,10 +76,8 @@ public class StatsScreen extends GridPane {
 		BarChart<String, Number> barChart = new BarChart<>(x, y);
 		XYChart.Series<String, Number> series1 = new XYChart.Series<String, Number>();
 		XYChart.Series<String, Number> series2 = new XYChart.Series<String, Number>();
-		// XYChart.Data<> you = account.getAverage();
-		// XYChart.Data<> you = account[map].getAverage();
-		XYChart.Data<String, Number> you = new XYChart.Data<>("", 10);
-		XYChart.Data<String, Number> them = new XYChart.Data<>("", 15);
+		XYChart.Data<String, Number> you = new XYChart.Data<>("", findUserAverage(accountManager.getLoggedInAccount().getDifficulty()));
+		XYChart.Data<String, Number> them = new XYChart.Data<>("", findAverage(accountManager.getLoggedInAccount().getDifficulty()));
 		series1.getData().add(you);
 		series1.setName("You");
 		series2.getData().add(them);
@@ -100,13 +98,20 @@ public class StatsScreen extends GridPane {
 	public void showBest() {
 		labels = new VBox(10);
 		// add user info
-		bestEasyScore = new Label("Best easy score: ");
-		bestMediumScore = new Label("Best medium score: ");
-		bestHardScore = new Label("Best hard score: ");
-		averageEasyScore = new Label("Average easy score: ");
-		averageMediumScore = new Label("Average medium score: ");
-		averageHardScore = new Label("Average hard score: ");
-		gamesPlayed = new Label("Games played: ");
+		Integer easyScore = findBest(Game.Difficulty.EASY);
+		Integer medScore = findBest(Game.Difficulty.MEDIUM);
+		Integer hardScore = findBest(Game.Difficulty.HARD);
+		Integer easyAvgScore = findBest(Game.Difficulty.EASY);
+		Integer medAvgScore = findBest(Game.Difficulty.MEDIUM);
+		Integer hardAvgScore = findBest(Game.Difficulty.HARD);
+		Integer numPlayed = accountManager.getLoggedInAccount().getHistory().size();
+		bestEasyScore = new Label("Best easy score: " + easyScore);
+		bestMediumScore = new Label("Best medium score: " + medScore);
+		bestHardScore = new Label("Best hard score: " + hardScore);
+		averageEasyScore = new Label("Average easy score: " + easyAvgScore);
+		averageMediumScore = new Label("Average medium score: " + medAvgScore);
+		averageHardScore = new Label("Average hard score: " + hardAvgScore);
+		gamesPlayed = new Label("Games played: " + numPlayed );
 		labels.getChildren().addAll(bestEasyScore, bestMediumScore, bestHardScore, averageEasyScore, averageMediumScore,
 				averageHardScore, gamesPlayed);
 		this.setConstraints(labels, 3, 2, 1, 1);
@@ -121,22 +126,20 @@ public class StatsScreen extends GridPane {
 	 * @param none
 	 * @return none
 	 */
-	public void getRecent() {
+	public void plotRecent() {
 		NumberAxis x = new NumberAxis();
 		NumberAxis y = new NumberAxis();
 		x.setLabel("Past Games");
 		y.setLabel("Number of Attempts");
 		LineChart<Number, Number> lineChart = new LineChart<>(x, y);
-		lineChart.setTitle("Recent Performance for --- mode");
+		lineChart.setTitle("Recent Performance for " + accountManager.getLoggedInAccount().getDifficulty().name().toLowerCase() + " mode");
 
 		XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
 		series1.setName("Player performance");
-		// List = account.getRecent(5);
-		series1.getData().add(new XYChart.Data<>(1, 10));
-		series1.getData().add(new XYChart.Data<>(2, 20));
-		series1.getData().add(new XYChart.Data<>(3, 15));
-		series1.getData().add(new XYChart.Data<>(4, 25));
-		series1.getData().add(new XYChart.Data<>(5, 14));
+		List<Integer> recents = getRecent(accountManager.getLoggedInAccount().getDifficulty());
+		for(int i = 0; i < recents.size(); i++) {
+			series1.getData().add(new XYChart.Data<>(i, recents.get(i)));
+		}
 
 		lineChart.getData().add(series1);
 		lineChart.setPrefSize(500, 250);
@@ -151,17 +154,17 @@ public class StatsScreen extends GridPane {
 	 * @param difficulty	the enum difficulty to search for
 	 * @return		average number of clicks it took a user to win on this difficulty
 	 */
-	private Integer findAverage(Game.Difficulty difficulty) {
+	private Integer findAverage(Game.Difficulty dif) {
 		Map<String, Account> accounts = accountManager.getAccounts();
 		Integer score = 0;
 		Integer entries = 0;
 		for(Map.Entry<String, Account> entry : accounts.entrySet()) {
 			Account a = entry.getValue();
-			if(!(a.getHistory().containsKey(difficulty))) {
+			if(!(a.getHistory().containsKey(dif))) {
 				continue;
 			}
 			else {
-				for(GameStats g: a.getHistory().get(difficulty)) {
+				for(GameStats g: a.getHistory().get(dif)) {
 					score += g.getNumClicks();
 					entries += 1;	
 				}
@@ -170,17 +173,36 @@ public class StatsScreen extends GridPane {
 		return (score / entries);
 				}
 	
+	private Integer findUserAverage(Game.Difficulty dif) {
+		Account activeAccount = accountManager.getLoggedInAccount();
+		Integer score = 0;
+		Integer numGames = 0;
+		if(activeAccount.getHistory().containsKey(dif)) {
+			List<GameStats> stats = activeAccount.getHistory().get(dif);
+			for(GameStats g: stats) {
+				score += g.getNumClicks();
+				numGames++;
+			}
+		}
+		if(score == 0) {
+			return -1;
+		}
+		else {
+			return score / numGames;
+		}
+	}
+	
 	/**
 	 * Takes in a difficulty enum and returns the lowest score achieved by the user for 
 	 * this difficulty
 	 * @param d		the enum difficulty to search for
 	 * @return		lowest score if exists else -1
 	 */
-	private Integer findBest(Game.Difficulty d) {
+	private Integer findBest(Game.Difficulty dif) {
 		
 		Account activeAccount = accountManager.getLoggedInAccount();
-		if(activeAccount.getHistory().containsKey(d)) {
-			List<GameStats> stats = activeAccount.getHistory().get(d);
+		if(activeAccount.getHistory().containsKey(dif)) {
+			List<GameStats> stats = activeAccount.getHistory().get(dif);
 			Integer min = Integer.MAX_VALUE;
 			for(GameStats g: stats) {
 				if(g.getNumClicks() < min) {
@@ -200,12 +222,12 @@ public class StatsScreen extends GridPane {
 	 * @param d		the enum difficulty to search for
 	 * @return		5 most recent scores, -1 initialized if does not exist.
 	 */
-	private List<Integer> getRecent(Game.Difficulty d){
+	private List<Integer> getRecent(Game.Difficulty dif){
 		List<Integer> recent = new ArrayList<Integer>(Collections.nCopies(5, -1));
 		Account activeAccount = accountManager.getLoggedInAccount();
-		if(activeAccount.getHistory().containsKey(d)) {
-			List<GameStats> stats = activeAccount.getHistory().get(d);
-			for(int i = 0; i < 5; i++) {
+		if(activeAccount.getHistory().containsKey(dif)) {
+			List<GameStats> stats = activeAccount.getHistory().get(dif);
+			for(int i = 0; i < Math.min(5, stats.size()); i++) {
 				recent.set(i, stats.get(i).getNumClicks());
 			}
 		}

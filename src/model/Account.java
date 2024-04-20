@@ -54,7 +54,9 @@ public class Account implements Serializable{
     	GameStats g = new GameStats(numGuesses, numSeconds, difficulty, numberOfCards);
     	gameHistory.get(difficulty).add(g);
     }
-    
+    public Game.Difficulty getDifficulty(){
+    	return this.prefferedSettings.getDifficulty();
+    }
 }
 
 
