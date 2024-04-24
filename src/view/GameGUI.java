@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import model.account.AccountManager;
 import model.account.Settings;
@@ -27,6 +28,8 @@ public class GameGUI extends Application {
 	private AccountManager accounts;
 	private Button settingsButton = new Button("Settings");
 	private Button previousPane = new Button("Close Settings");
+	private Button statsButton = new Button("Statistics");
+	private HBox topMenu;
 	
 	private final double CENTER_WIDTH = 900;
 	private final double CENTER_HEIGHT = 600;
@@ -51,6 +54,12 @@ public class GameGUI extends Application {
 		primaryStage.show();
 		setEventHandlers();
 	}
+	
+	private void setUpTopMenu() {
+		HBox topMenu = new HBox(10);
+		topMenu.getChildren().addAll(settingsButton, statsButton);
+		all.setTop(topMenu);
+	}
 
 	private void setEventHandlers() {
 		login.setOnLogin(() -> {
@@ -58,6 +67,8 @@ public class GameGUI extends Application {
 			settings = accounts.getLoggedInAccount().getPrefferedSettings();
 			Theme.setTheme(settings.getPrefferedTheme());
 			game = new GameView(Game.makeGame(settings));
+			stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT, accounts);
+			stats.getStylesheets().add("styles.css");
 			game.setOnGameEnd(() -> {
 				
 			System.out.println(game.getEndTime() + "\n");
@@ -72,18 +83,31 @@ public class GameGUI extends Application {
 				System.out.println(accounts.getLoggedInAccount().getPrefferedSettings().getDifficulty());
 				
 				});
-			all.setTop(settingsButton);
+			setUpTopMenu();
 		});
+		
 		settingsButton.setOnAction(e -> {
 			Node currentCenter = all.getCenter();
 			all.setTop(previousPane);
 			if (!(currentCenter.equals(settingsView))) {
 				previousPane.setOnAction(event -> {
-					all.setTop(settingsButton);
+					setUpTopMenu();
 					all.setCenter(currentCenter);
 				});
 			}
 			all.setCenter(settingsView);
+		});
+		
+		statsButton.setOnAction(e -> {
+			Node currentCenter = all.getCenter();
+			all.setTop(previousPane);
+			if (!(currentCenter.equals(stats))) {
+				previousPane.setOnAction(event -> {
+					setUpTopMenu();
+					all.setCenter(currentCenter);
+				});
+			}
+			all.setCenter(stats);
 		});
 
 
@@ -92,6 +116,7 @@ public class GameGUI extends Application {
 			game.newGame(Game.makeGame(settings));
 			accounts.getLoggedInAccount().setPrefferedSettings(settings);
 		});
+
 	}
 
 	public static void main(String[] args) {

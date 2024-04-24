@@ -49,16 +49,31 @@ public class StatsScreen extends GridPane {
 	private Label gamesPlayed;
 
 	private VBox labels;
+	
+	private BarChart<String, Number> barChart;
+	
+	private LineChart<Number, Number> lineChart;
 
 	public StatsScreen(double width, double height, AccountManager a) {
-		this.setWidth(width);
-		this.setHeight(height);
-		this.accountManager = a;
-		compToAverage();
-		showBest();
-		plotRecent();
+	    this.setWidth(width);
+	    this.setHeight(height);
+	    this.accountManager = a;
+	    initBarChart();
+	    initLineChart();
+	    showBest();
+	    plotRecent();
 	}
 
+	private void initBarChart() {
+	    CategoryAxis x = new CategoryAxis();
+	    x.setLabel("Player");
+	    NumberAxis y = new NumberAxis();
+	    y.setLabel("Average attempts per game");
+	    barChart = new BarChart<>(x, y);
+	    barChart.setBarGap(0);
+	    this.setConstraints(barChart, 1, 1, 2, 2);
+	    this.getChildren().add(barChart);
+	}
 	/**
 	 * Compares the player's average performance against other players and displays
 	 * it using a bar chart. Assumes the existence of an Account object with
@@ -68,25 +83,14 @@ public class StatsScreen extends GridPane {
 	 * @return none
 	 */
 	public void compToAverage() {
-		CategoryAxis x = new CategoryAxis();
-		x.setLabel("Player");
-		NumberAxis y = new NumberAxis();
-		// need to handle difficulties too -- maybe implement a dropdown select?
-		y.setLabel("Average attempts per game");
-		BarChart<String, Number> barChart = new BarChart<>(x, y);
-		XYChart.Series<String, Number> series1 = new XYChart.Series<String, Number>();
-		XYChart.Series<String, Number> series2 = new XYChart.Series<String, Number>();
-		XYChart.Data<String, Number> you = new XYChart.Data<>("", findUserAverage(accountManager.getLoggedInAccount().getDifficulty()));
-		XYChart.Data<String, Number> them = new XYChart.Data<>("", findAverage(accountManager.getLoggedInAccount().getDifficulty()));
-		series1.getData().add(you);
-		series1.setName("You");
-		series2.getData().add(them);
-		series2.setName("Them");
-		barChart.getData().addAll(series1, series2);
-		barChart.setBarGap(0);
-		this.setConstraints(barChart, 1, 1, 2, 2);
-		this.getChildren().add(barChart);
-
+	    barChart.getData().clear();
+	    XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+	    XYChart.Series<String, Number> series2 = new XYChart.Series<>();
+	    series1.getData().add(new XYChart.Data<>("You", findUserAverage(accountManager.getLoggedInAccount().getDifficulty())));
+	    series2.getData().add(new XYChart.Data<>("Them", findAverage(accountManager.getLoggedInAccount().getDifficulty())));
+	    series1.setName("You");
+	    series2.setName("Them");
+	    barChart.getData().addAll(series1, series2);
 	}
 
 	/**
@@ -119,6 +123,17 @@ public class StatsScreen extends GridPane {
 
 	}
 
+	private void initLineChart() {
+	    NumberAxis x = new NumberAxis();
+	    NumberAxis y = new NumberAxis();
+	    x.setLabel("Past Games");
+	    y.setLabel("Number of Attempts");
+	    lineChart = new LineChart<>(x, y);
+	    lineChart.setTitle("Recent Performance");
+	    this.setConstraints(lineChart, 1, 3, 3, 1);
+	    this.getChildren().add(lineChart);
+	}
+	
 	/**
 	 * Retrieves and displays recent performance data in a line chart format.
 	 * 
@@ -126,26 +141,66 @@ public class StatsScreen extends GridPane {
 	 * @return none
 	 */
 	public void plotRecent() {
-		NumberAxis x = new NumberAxis();
-		NumberAxis y = new NumberAxis();
-		x.setLabel("Past Games");
-		y.setLabel("Number of Attempts");
-		LineChart<Number, Number> lineChart = new LineChart<>(x, y);
-		lineChart.setTitle("Recent Performance for " + accountManager.getLoggedInAccount().getDifficulty().name().toLowerCase() + " mode");
+	    lineChart.getData().clear();
+	    XYChart.Series<Number, Number> series = new XYChart.Series<>();
+	    series.setName("Player performance");
+	    List<Integer> recents = getRecent(accountManager.getLoggedInAccount().getDifficulty());
+	    for (int i = 0; i < recents.size(); i++) {
+	        series.getData().add(new XYChart.Data<>(i, recents.get(i)));
+	    }
+	    lineChart.getData().add(series);
+	}
 
-		XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-		series1.setName("Player performance");
+	public void refreshStats() {
+	    Account account = accountManager.getLoggedInAccount();
+	    if (account == null) 
+	    	return;  
 
-		List<Integer> recents = getRecent(accountManager.getLoggedInAccount().getDifficulty());
-		for(int i = 0; i < recents.size(); i++) {
-			series1.getData().add(new XYChart.Data<>(i, recents.get(i)));
-		}
+	    updateLabels(account);
+	    updateCharts(account);
+	}
 
-		lineChart.getData().add(series1);
-		lineChart.setPrefSize(500, 250);
-		this.setConstraints(lineChart, 1, 3, 3, 1);
-		this.getChildren().add(lineChart);
+	private void updateLabels(Account account) {
+	    Stats easyStats = account.getStats(Game.Difficulty.EASY);
+	    Stats mediumStats = account.getStats(Game.Difficulty.MEDIUM);
+	    Stats hardStats = account.getStats(Game.Difficulty.HARD);
 
+	    bestEasyScore.setText("Best easy guesses: " + easyStats.getBestGuesses());
+	    bestMediumScore.setText("Best medium guesses: " + mediumStats.getBestGuesses());
+	    bestHardScore.setText("Best hard guesses: " + hardStats.getBestGuesses());
+	    
+	    averageEasyScore.setText("Average easy guesses: " + easyStats.getAverageGuesses());
+	    averageMediumScore.setText("Average medium guesses: " + mediumStats.getAverageGuesses());
+	    averageHardScore.setText("Average hard guesses: " + hardStats.getAverageGuesses());
+	    
+	    gamesPlayed.setText("Games played: " + (easyStats.getGamesPlayed() + mediumStats.getGamesPlayed() + hardStats.getGamesPlayed()));
+	}
+
+	private void updateCharts(Account account) {
+	    updateBarChart(account);
+	    updateLineChart(account);
+	}
+
+	private void updateBarChart(Account account) {
+	    barChart.getData().clear();
+	    XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+	    XYChart.Series<String, Number> series2 = new XYChart.Series<>();
+	    series1.getData().add(new XYChart.Data<>("You", findUserAverage(account.getDifficulty())));
+	    series2.getData().add(new XYChart.Data<>("Them", findAverage(account.getDifficulty())));
+	    series1.setName("You");
+	    series2.setName("Them");
+	    barChart.getData().addAll(series1, series2);
+	}
+
+	private void updateLineChart(Account account) {
+	    lineChart.getData().clear();
+	    XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+	    series1.setName("Player performance");
+	    List<Integer> recents = getRecent(account.getDifficulty());
+	    for (int i = 0; i < recents.size(); i++) {
+	        series1.getData().add(new XYChart.Data<>(i, recents.get(i)));
+	    }
+	    lineChart.getData().add(series1);
 	}
 	
 	/**
@@ -195,6 +250,7 @@ public class StatsScreen extends GridPane {
 		Stats stats = activeAccount.getStats(dif);
 		return stats.getBestGuesses();	
 	}
+	
 	/**
 	 * Takes in a difficulty enum and returns the most recent 5 game scores for this 
 	 * user and difficulty
