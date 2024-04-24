@@ -110,6 +110,8 @@ public class SettingsPane extends BorderPane implements Observer {
 		setTop(settingsBar);
 		card = new CardPreview();
 		card.setOnMouseClicked(e -> {
+			if(card.isMidAnimation()) return;
+			
 			card.showFace = !card.showFace;
 			card.update();
 		});

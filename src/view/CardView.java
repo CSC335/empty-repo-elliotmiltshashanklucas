@@ -19,6 +19,10 @@ import model.game.Theme;
 public class CardView extends ImageView implements Observer {
 	private Card card;
 	private Theme theme = Theme.getTheme();
+	private boolean midAnimation = false;
+	public boolean isMidAnimation() {
+		return midAnimation;
+	}
 
 	/**
 	 * Constructs a new CardView with a specified card. Sets up the image view
@@ -44,7 +48,7 @@ public class CardView extends ImageView implements Observer {
 	 * @return a configured RotateTransition object
 	 */
 	private RotateTransition createFlipAnimation(int angle) {
-		RotateTransition rotator = new RotateTransition(Duration.millis(500));
+		RotateTransition rotator = new RotateTransition(Duration.millis(250));
 		rotator.setNode(this);
 		rotator.setAxis(Rotate.Y_AXIS);
 		rotator.setFromAngle(0);
@@ -78,12 +82,15 @@ public class CardView extends ImageView implements Observer {
 	public void update() {
 		var flipped = isFlipped();
 		theme = Theme.getTheme();
+		midAnimation = true;
 		var rotator = createFlipAnimation(90);
 		rotator.setOnFinished(e -> {
 			updateImage(flipped);
 			this.setRotate(90);
 			var otherFlip = createFlipAnimation(0);
+			otherFlip.setOnFinished(p -> midAnimation = false);
 			otherFlip.play();
+			
 		});
 		if (!isFlipped())
 			rotator.setDelay(Duration.millis(1000));

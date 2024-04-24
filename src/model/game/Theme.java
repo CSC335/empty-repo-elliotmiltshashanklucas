@@ -232,6 +232,8 @@ public class Theme {
 				case "FACES":
 					for(File face : f.listFiles())
 						t.addCard(face.getPath());
+				default:
+					continue;
 				}
 				
 				
