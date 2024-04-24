@@ -42,6 +42,8 @@ public class SettingsPane extends BorderPane implements Observer {
 
 		protected void updateImage(boolean isFlipped) {
 			Theme selectedTheme = Theme.getTheme(themeView.getSelectionModel().getSelectedItem());
+			if(selectedTheme == null)
+				return;
 			if (isFlipped)
 				this.setImage(selectedTheme.getAllImages().get(0));
 			else
@@ -97,7 +99,7 @@ public class SettingsPane extends BorderPane implements Observer {
 		themes.addAll(Theme.getThemes());
 		themeView.setItems(themes);
 		themeView.setValue(settings.getPrefferedTheme());
-		themeView.setOnAction(e -> card.update());
+		themeView.setOnAction(e -> card.updateImage(card.isFlipped()));
 		gamemode.addAll(Game.Difficulty.values());
 		gamemodeView.setItems(gamemode);
 		gamemodeView.setValue(settings.getDifficulty());

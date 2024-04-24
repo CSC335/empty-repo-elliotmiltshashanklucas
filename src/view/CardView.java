@@ -83,7 +83,7 @@ public class CardView extends ImageView implements Observer {
 		var flipped = isFlipped();
 		theme = Theme.getTheme();
 		midAnimation = true;
-		var rotator = createFlipAnimation(90);
+		var rotator = createFlipAnimation(95);
 		rotator.setOnFinished(e -> {
 			updateImage(flipped);
 			this.setRotate(90);
