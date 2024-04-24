@@ -1,8 +1,10 @@
-package model;
+package model.account;
 
 import java.io.Serializable;
 
-import model.Game.Difficulty;
+import model.game.Game;
+import model.game.Theme;
+import model.game.Game.Difficulty;
 
 public class Settings implements Serializable {
 	private static final long serialVersionUID = 1L;

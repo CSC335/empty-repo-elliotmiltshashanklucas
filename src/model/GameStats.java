@@ -1,5 +1,7 @@
 package model;
 
+import model.game.Game;
+
 public class GameStats {
 	private int numClicks;
 	private double time;

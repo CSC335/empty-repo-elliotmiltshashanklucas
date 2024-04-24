@@ -10,10 +10,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import model.AccountManager;
-import model.Game;
-import model.Settings;
-import model.Theme;
+import model.account.AccountManager;
+import model.account.Settings;
+import model.game.Game;
+import model.game.Theme;
 
 public class GameGUI extends Application {
 	private Canvas canvas;

@@ -1,5 +1,7 @@
 package view;
 
+import interfaces.Action;
+import interfaces.Observer;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -13,8 +15,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import model.Game;
-import model.Theme;
+import model.game.Game;
+import model.game.Theme;
 
 /**
  * GameView is a BorderPane that displays a game board and handles game

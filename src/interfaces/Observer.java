@@ -1,4 +1,4 @@
-package view;
+package interfaces;
 
 /**
  * The Observer interface defines a method for receiving updates from an

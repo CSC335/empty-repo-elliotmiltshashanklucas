@@ -4,10 +4,10 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import model.Account;
-import model.AccountManager;
-import model.Game;
-import model.Game.Difficulty;
+import model.account.Account;
+import model.account.AccountManager;
+import model.game.Game;
+import model.game.Game.Difficulty;
 
 public class accountStatsTest extends Application {
 	AccountManager am;

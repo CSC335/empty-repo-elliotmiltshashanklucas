@@ -1,4 +1,4 @@
-package view;
+package interfaces;
 
 /**
  * The Action interface provides a single method, onAction, which is intended to
