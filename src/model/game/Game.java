@@ -60,7 +60,7 @@ public class Game implements Observer{
 		case EASY:
 			return new Game(rows, cols, 4, 2);
 		case HARD:
-			return new Game(rows, cols, 3, 3);
+			return new Game(rows, cols, 4, 4);
 		default:
 			return new Game(rows, cols, 2, 2);
 		}
