@@ -17,11 +17,11 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
-import model.Account;
-import model.Account.Stats;
-import model.AccountManager;
-import model.Game;
 import model.GameStats;
+import model.account.Account;
+import model.account.AccountManager;
+import model.account.Account.Stats;
+import model.game.Game;
 
 /**
  * A customized grid layout for displaying statistical information related to a

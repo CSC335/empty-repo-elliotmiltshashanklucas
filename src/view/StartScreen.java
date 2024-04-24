@@ -1,5 +1,7 @@
 package view;
 
+import interfaces.Action;
+import interfaces.Observer;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -10,7 +12,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import model.Theme;
+import model.game.Theme;
 
 /**
  * A customized start screen layout containing a background image and a play

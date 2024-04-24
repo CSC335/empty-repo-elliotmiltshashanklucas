@@ -1,4 +1,4 @@
-package model;
+package model.account;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+
+import model.game.Game;
+import model.game.Game.Difficulty;
 
 public class Account implements Serializable{
 	private static final long serialVersionUID = 5305138822007823784L;
@@ -99,7 +102,7 @@ public class Account implements Serializable{
     		return bestGuesses == Integer.MAX_VALUE ? 0 : bestGuesses;
     	}
     	public double getBestTime() {
-    		return bestGuesses == Integer.MAX_VALUE ? 0 : bestGuesses;
+    		return bestGuesses == Integer.MAX_VALUE ? 0 : bestTime;
     	}
     	public int getBestCards() {
     		return bestCards == Integer.MAX_VALUE ? 0 : bestCards;

@@ -1,13 +1,14 @@
-package model;
+package model.game;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import interfaces.Observer;
 import javafx.scene.image.Image;
-import view.Observer;
 
 /**
  * The Theme class holds GUI information associated with various themes
@@ -46,7 +47,7 @@ public class Theme {
 	private List<String> images = new ArrayList<>();
 	private boolean light = false;
 	private String music;
-	private String prefix = "file:images/";
+	private String prefix = "file:";
 	private static HashMap<String, Theme> allThemes = new HashMap<String, Theme>();
 	private static List<Observer> observerList = new ArrayList<>();
 
@@ -210,66 +211,35 @@ public class Theme {
 	public static Set<String> getThemes() {
 		return allThemes.keySet();
 	}
+	public static Theme getTheme(String s) {
+		return allThemes.get(s);
+	}
 
 	private static void setUpThemes() {
 		// Cats Theme
-		Theme t = new Theme("Cats");
-		t.setBackground("catsBackground.jpg");
-		t.addCard("cat1.png");
-		t.addCard("cat2.png");
-		t.addCard("cat3.png");
-		t.addCard("cat4.png");
-		t.addCard("cat5.png");
-		t.addCard("cat6.png");
-		t.setCardBack("catCardBack.png");
-		allThemes.put("Cats", t);
-
-		// Dogs Theme
-		t = new Theme("Dogs");
-		t.setBackground("doggyHeaven.jpg");
-		t.addCard("dogs11.png");
-		t.addCard("dogs12.png");
-		t.addCard("dogs13.png");
-		t.addCard("dogs14.png");
-		t.addCard("dogs15.png");
-		t.addCard("dogs16.png");
-		t.setCardBack("dogCardBack.png");
-		allThemes.put("Dogs", t);
-
-		// Planets Theme
-		t = new Theme("Planets");
-		t.setBackground("planetsBackground.jpg");
-		t.addCard("mercury.jpg");
-		t.addCard("venus.jpg");
-		t.addCard("earth.jpg");
-		t.addCard("mars.jpg");
-		t.addCard("jupiter.jpg");
-		t.addCard("saturn.jpg");
-		t.addCard("uranus.jpg");
-		t.addCard("neptune.jpg");
-		t.addCard("pluto.jpg");
-		t.addCard("moon.jpg");
-		t.setCardBack("planetCardBack.png");
-		allThemes.put("Planets", t);
-
-		// Fish Theme
-		t = new Theme("Fish");
-		t.setBackground("fishBackground.jpg");
-		for (int i = 1; i <= 10; i++) {
-			t.addCard("fish" + i + ".jpeg");
+		File dir = new File("Images");
+		for(File folder : dir.listFiles()) {
+			if(!folder.isDirectory()) continue;
+			Theme t = new Theme(folder.getName());
+			for(File f : folder.listFiles()) {
+				switch(f.getName().toUpperCase()) {
+				case "BACKGROUND":
+					t.setBackground(f.listFiles()[0].getPath());
+					break;
+				case "CARDBACK":
+					t.setCardBack(f.listFiles()[0].getPath());
+					break;
+				case "FACES":
+					for(File face : f.listFiles())
+						t.addCard(face.getPath());
+				default:
+					continue;
+				}
+				
+				
+			}
+			allThemes.put(t.getName(), t);
 		}
-		t.setCardBack("fishCardBack.png");
-		allThemes.put("Fish", t);
-
-		// Jungle Theme
-		t = new Theme("Jungle");
-		t.setBackground("jungleBackground.jpg");
-		for (int i = 1; i <= 10; i++) {
-			t.addCard("jungle" + i + ".jpg");
-		}
-		t.setCardBack("jungleCardBack.png");
-		allThemes.put("Jungle", t);
-
 		currentTheme = allThemes.get("Cats");
 	}
 

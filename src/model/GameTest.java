@@ -10,6 +10,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import model.game.Card;
+import model.game.Game;
+import model.game.Theme;
+
 /*
  * author: Shashank Raj Pitla
  * This class tests all the methods implemented in Game class 

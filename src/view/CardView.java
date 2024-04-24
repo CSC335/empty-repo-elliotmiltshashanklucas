@@ -1,13 +1,14 @@
 package view;
 
+import interfaces.Observer;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
-import model.Card;
-import model.Theme;
+import model.game.Card;
+import model.game.Theme;
 
 /**
  * CardView is an ImageView representing a card in a game, capable of displaying
@@ -18,6 +19,10 @@ import model.Theme;
 public class CardView extends ImageView implements Observer {
 	private Card card;
 	private Theme theme = Theme.getTheme();
+	private boolean midAnimation = false;
+	public boolean isMidAnimation() {
+		return midAnimation;
+	}
 
 	/**
 	 * Constructs a new CardView with a specified card. Sets up the image view
@@ -28,10 +33,11 @@ public class CardView extends ImageView implements Observer {
 	 */
 	public CardView(Card c) {
 		card = c;
-		c.addListener(this);
+		if(c != null)
+			c.addListener(this);
 		this.setFitHeight(140);
 		this.setFitWidth(120);
-		updateImage(card.isFlipped());
+		updateImage(isFlipped());
 		Theme.addObserver(this);
 	}
 
@@ -42,7 +48,7 @@ public class CardView extends ImageView implements Observer {
 	 * @return a configured RotateTransition object
 	 */
 	private RotateTransition createFlipAnimation(int angle) {
-		RotateTransition rotator = new RotateTransition(Duration.millis(500));
+		RotateTransition rotator = new RotateTransition(Duration.millis(250));
 		rotator.setNode(this);
 		rotator.setAxis(Rotate.Y_AXIS);
 		rotator.setFromAngle(0);
@@ -59,28 +65,34 @@ public class CardView extends ImageView implements Observer {
 	 * @param isFlipped true if the card is flipped (showing its face), false if
 	 *                  showing its back
 	 */
-	private void updateImage(boolean isFlipped) {
+	protected void updateImage(boolean isFlipped) {
 		if (isFlipped)
 			this.setImage(new Image(card.getImage()));
 		else
 			this.setImage(theme.getCardBack());
 	}
-
+	// hack to allow for subclassing wtihout providing a card
+	protected boolean isFlipped() {
+		return card.isFlipped();
+	}
 	/**
 	 * Called when an observed object changes. This method handles flipping
 	 * animations and updates the card's image according to the new state.
 	 */
 	public void update() {
-		var flipped = card.isFlipped();
+		var flipped = isFlipped();
 		theme = Theme.getTheme();
-		var rotator = createFlipAnimation(90);
+		midAnimation = true;
+		var rotator = createFlipAnimation(95);
 		rotator.setOnFinished(e -> {
 			updateImage(flipped);
 			this.setRotate(90);
 			var otherFlip = createFlipAnimation(0);
+			otherFlip.setOnFinished(p -> midAnimation = false);
 			otherFlip.play();
+			
 		});
-		if (!card.isFlipped())
+		if (!isFlipped())
 			rotator.setDelay(Duration.millis(1000));
 		rotator.play();
 

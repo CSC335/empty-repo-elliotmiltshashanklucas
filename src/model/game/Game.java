@@ -1,10 +1,11 @@
-package model;
+package model.game;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import view.Observer;
+import interfaces.Observer;
+import model.account.Settings;
 
 /**
  * The Game class represents the logic and state of a game.

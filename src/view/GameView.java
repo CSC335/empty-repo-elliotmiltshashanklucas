@@ -1,5 +1,7 @@
 package view;
 
+import interfaces.Action;
+import interfaces.Observer;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -13,8 +15,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import model.Game;
-import model.Theme;
+import model.game.Game;
+import model.game.Theme;
 
 /**
  * GameView is a BorderPane that displays a game board and handles game
@@ -59,12 +61,27 @@ public class GameView extends BorderPane implements Observer {
 	 * @param onAction the action to execute on game completion
 	 */
 	public void setOnGameEnd(Action onAction) {
-		onGameEnd = onAction;
+		
+		onGameEnd = () -> {
+			// Wait for all of the animations to finish
+			for(Node e : board.getChildren()) {
+				CardView c = (CardView) e;
+				//TODO I sort of hate everything about these changes
+				if(c.isMidAnimation()) {
+					Platform.runLater(() -> onGameEnd.onAction());
+					return;
+				}
+			}
+			onAction.onAction();
+			
+			};
 	}
 
 	private void layoutGUI() {
 		board = new GridPane();
 		board.setAlignment(Pos.CENTER);
+		System.out.println(game.getCols());
+		System.out.println(game.getRows());
 		for (int row = 0; row < game.getRows(); row++)
 			for (int col = 0; col < game.getCols(); col++)
 				board.add(new CardView(game.getCard(row, col)), col, row);
@@ -72,9 +89,9 @@ public class GameView extends BorderPane implements Observer {
 		board.setVgap(10);
 		this.setCenter(board);
 		timerLabel = new Label("00:00");
-		timerLabel.setTextFill(Color.BLACK); 
+		timerLabel.setTextFill(Color.WHITE); 
 		timerLabel.setFont(Font.font("Arial", 24));
-		board.add(timerLabel, 4, 4);
+		setTop(timerLabel);
 		board.setMinHeight(500);
 		startTimer();
 		Thread timerThread = new Thread(()->{

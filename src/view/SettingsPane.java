@@ -1,5 +1,7 @@
 package view;
 
+import interfaces.Action;
+import interfaces.Observer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -9,15 +11,17 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import model.Game;
-import model.Settings;
-import model.Theme;
+import model.account.Settings;
+import model.game.Card;
+import model.game.Game;
+import model.game.Theme;
 
 /**
  * SettingsPane is a BorderPane that allows users to select and apply themes
  * from a list. It updates its display when the list of themes changes.
  */
 public class SettingsPane extends BorderPane implements Observer {
+
 	private Settings settings;
 	private HBox settingsBar = new HBox();
 	private ObservableList<String> themes = FXCollections.observableArrayList();
@@ -28,6 +32,28 @@ public class SettingsPane extends BorderPane implements Observer {
 	private ComboBox<Tuple> boardSizesView = new ComboBox<>();
 	private Button save = new Button("Save Changes");
 	private Action onChange = () -> {};
+	
+	private class CardPreview extends CardView {
+		public boolean showFace = false;
+		public CardPreview() {
+			super(null);
+			// TODO Auto-generated constructor stub
+		}
+
+		protected void updateImage(boolean isFlipped) {
+			Theme selectedTheme = Theme.getTheme(themeView.getSelectionModel().getSelectedItem());
+			if(selectedTheme == null)
+				return;
+			if (isFlipped)
+				this.setImage(selectedTheme.getAllImages().get(0));
+			else
+				this.setImage(selectedTheme.getCardBack());
+		}
+		protected boolean isFlipped() {
+			return showFace;
+		}
+	}
+	private CardPreview card;
 	public void setOnChange(Action onChange) {
 		this.onChange = onChange;
 	}
@@ -64,6 +90,7 @@ public class SettingsPane extends BorderPane implements Observer {
 			Tuple dimensions = boardSizesView.getSelectionModel().getSelectedItem();
 			settings.setDimension(dimensions.rows, dimensions.cols);
 			onChange.onAction();
+		
 		});
 		
 	}
@@ -72,6 +99,7 @@ public class SettingsPane extends BorderPane implements Observer {
 		themes.addAll(Theme.getThemes());
 		themeView.setItems(themes);
 		themeView.setValue(settings.getPrefferedTheme());
+		themeView.setOnAction(e -> card.updateImage(card.isFlipped()));
 		gamemode.addAll(Game.Difficulty.values());
 		gamemodeView.setItems(gamemode);
 		gamemodeView.setValue(settings.getDifficulty());
@@ -81,7 +109,16 @@ public class SettingsPane extends BorderPane implements Observer {
 		boardSizesView.setItems(boardSizes);
 		boardSizesView.setValue(new Tuple(settings.getRows(), settings.getColumns()));
 		settingsBar.getChildren().addAll(themeView, gamemodeView, boardSizesView);
-		setCenter(settingsBar);
+		setTop(settingsBar);
+		card = new CardPreview();
+		card.setOnMouseClicked(e -> {
+			if(card.isMidAnimation()) return;
+			
+			card.showFace = !card.showFace;
+			card.update();
+		});
+
+		setCenter(card);
 		setBottom(save);
 		update();
 		
