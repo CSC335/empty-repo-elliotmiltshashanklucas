@@ -52,6 +52,8 @@ public class LoginScreen extends BorderPane {
 	private void layoutGUI(double d, double e) {
 		this.setWidth(d);
 		this.setHeight(e);
+		usernameField.setPromptText("Enter your username");
+		passwordField.setPromptText("Enter your password");
 		usernameDetails = new HBox();
 		usernameDetails.getChildren().addAll(accountNameLabel, usernameField, loginButton);
 		usernameDetails.setSpacing(10);
@@ -60,11 +62,14 @@ public class LoginScreen extends BorderPane {
 		passwordDetails.setSpacing(10);
 		loginPanel = new VBox();
 		loginPanel.getChildren().addAll(prompt, usernameDetails, passwordDetails, createNewAccount);
-		usernameDetails.setPadding(new Insets(0, 0, 0, 80));
-		passwordDetails.setPadding(new Insets(0, 0, 0, 107));
+		usernameDetails.setPadding(new Insets(0, 0, 0, 300));
+		passwordDetails.setPadding(new Insets(0, 0, 0, 327));
 		loginPanel.setSpacing(10);
 		loginPanel.setAlignment(Pos.CENTER);
 		this.setCenter(loginPanel);
+	    this.setStyle("-fx-background-color: #f0f4f7;"); 
+	    loginButton.getStyleClass().add("login-button");
+	    createNewAccount.getStyleClass().add("create-account-button");
 
 	}
 

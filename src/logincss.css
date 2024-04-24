@@ -1,0 +1,35 @@
+/* login.css */
+.root {
+  -fx-background-color: #eceff1;
+}
+.login-pane {
+    -fx-background-image: url("/images/backgroundImg.png");
+    -fx-background-size: cover; 
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.label {
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+}
+
+.text-field, .password-field {
+  -fx-pref-width: 200px;
+  -fx-font-size: 12px;
+  -fx-padding: 8px;
+  -fx-border-radius: 5px;
+  -fx-border-color: #78909C;
+}
+
+.button {
+  -fx-background-color: #78909C;
+  -fx-text-fill: white;
+  -fx-border-radius: 5px;
+  -fx-background-radius: 5px;
+  -fx-padding: 10px;
+}
+
+.button:hover {
+  -fx-background-color: #5d7079;
+}

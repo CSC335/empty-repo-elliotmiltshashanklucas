@@ -45,6 +45,8 @@ public class GameGUI extends Application {
 		*/
 		all.setCenter(login);
 		Scene scene = new Scene(all);
+		scene.getStylesheets().add("logincss.css");
+		login.getStyleClass().add("login-pane");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		setEventHandlers();
