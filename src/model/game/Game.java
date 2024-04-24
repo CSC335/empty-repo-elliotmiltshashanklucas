@@ -28,7 +28,7 @@ public class Game implements Observer{
 	private List<Card> cards = new ArrayList<>();
 	private List<Card> curGuesses = new ArrayList<>();
 	private int numClicked = 0;
-	private int setsFound = 0;
+	private int matchesFound = 0;
 	private int totalGuesses = 0;
 	static final public int DEFAULT_COLS = 4;
 	static final public int DEFAULT_ROWS = 3;
@@ -108,7 +108,7 @@ public class Game implements Observer{
      */
 	public void newGame() {
 		numClicked = 0;
-		setsFound = 0;
+		matchesFound = 0;
 		totalGuesses = 0;
 		// List<String> cardIdentifiers = getCardIdentifiers(numSets);
 		cards.clear();
@@ -161,12 +161,11 @@ public class Game implements Observer{
 				} else {
 					numClicked = 0;
 					curGuesses.clear();
-					setsFound++;
-					if (setsFound < numSets) {
-						return state.MATCH;
-					} else {
-						//END OF GAME ACTIONS
+					matchesFound++;
+					if (isGameOver()) {
 						return state.END_OF_GAME;
+					} else {
+						return state.MATCH;
 					}
 				}
 			}
@@ -214,7 +213,7 @@ public class Game implements Observer{
      * @return true if the game is over, false otherwise
      */
 	public boolean isGameOver() {
-		return numSets == setsFound;
+		return matchesFound * matchSize == rows * cols;
 	}
 	
 	/**
@@ -232,7 +231,7 @@ public class Game implements Observer{
      * @return the number of sets found
      */
 	public int getNumSetsFound() {
-		return setsFound;
+		return matchesFound;
 	}
 
 	/**
@@ -243,7 +242,7 @@ public class Game implements Observer{
 	public void setCards(List<Card> testCards) {
 		this.cards = testCards;
 		this.numClicked = 0;
-		this.setsFound = 0;
+		this.matchesFound = 0;
 		this.totalGuesses = 0;
 
 	}

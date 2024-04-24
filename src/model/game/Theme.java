@@ -216,7 +216,6 @@ public class Theme {
 	}
 
 	private static void setUpThemes() {
-		// Cats Theme
 		File dir = new File("Images");
 		for(File folder : dir.listFiles()) {
 			if(!folder.isDirectory()) continue;
