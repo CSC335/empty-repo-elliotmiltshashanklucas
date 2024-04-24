@@ -65,9 +65,9 @@ public class GameView extends BorderPane implements Observer {
 	private void layoutGUI() {
 		board = new GridPane();
 		board.setAlignment(Pos.CENTER);
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 4; j++)
-				board.add(new CardView(game.getCard(i, j)), j, i);
+		for (int row = 0; row < game.getRows(); row++)
+			for (int col = 0; col < game.getCols(); col++)
+				board.add(new CardView(game.getCard(row, col)), col, row);
 		board.setHgap(10);
 		board.setVgap(10);
 		this.setCenter(board);
