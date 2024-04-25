@@ -120,6 +120,30 @@ public class Game implements Observer{
 				cards.add(new Card(id));
 			}
 		}
+		shuffle();
+	}
+	
+	/**
+	 * Starts a new game, but does not shuffle the cards
+	 */
+	public void newTestGame() {
+		numClicked = 0;
+		matchesFound = 0;
+		totalGuesses = 0;
+		// List<String> cardIdentifiers = getCardIdentifiers(numSets);
+		cards.clear();
+		List<String> cardFaces = theme.getImageStrings(numSets);
+		for (String id : cardFaces) {
+			for (int i = 0; i < setSize; i++) {
+				cards.add(new Card(id));
+			}
+		}
+	}
+	
+	/**
+	 * Shuffles the cards
+	 */
+	public void shuffle() {
 		Collections.shuffle(cards);
 	}
 	
