@@ -4,12 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import java.util.Collections;
-import java.util.List;
-
 import model.game.*;
-import model.game.Game.Difficulty;
-import model.game.Game.state;
 import model.account.*;
 
 public class ModelTests {
@@ -103,12 +98,37 @@ public class ModelTests {
 	
 	@Test
 	public void testAccount() {
-		
+		Settings s = new Settings();
+		Account alice = new Account("alice", "bestpasswordever1234321", s);
+		Account bob = new Account("bob", "123", s);
+
+		assertEquals(alice.getPrefferedSettings().getDifficulty(), new Settings().getDifficulty());
+		assertEquals(alice.getPrefferedSettings().getPrefferedTheme(), new Settings().getPrefferedTheme());
+		alice.addGameData(10, 100, Game.Difficulty.EASY, 8);
+		alice.addGameData(12, 20, Game.Difficulty.EASY, 8);
+		assertTrue(alice.getStats(Game.Difficulty.EASY).getAverageGuesses() == 11);
+		assertTrue(alice.getStats(Game.Difficulty.EASY).getBestGuesses() == 10);
+		assertTrue(alice.getStats(Game.Difficulty.EASY).getAverageTime() == 60);
+		assertTrue(alice.getStats(Game.Difficulty.EASY).getBestTime() == 20);
+		assertTrue(bob.getUserName() == "bob");
 	}
 	
 	@Test
 	public void testAccountManager() {
-		
+		AccountManager am = new AccountManager();
+		assertTrue(am.createAccount("bob", "123"));
+		assertTrue(am.createAccount("alice", "bestpasswordever1234321"));
+		assertFalse(am.createAccount("bob", "123123123123123123"));
+		assertTrue(am.getAccounts().size() == 2);
+
+		assertFalse(am.userIsLoggedIn());
+		assertFalse(am.login("bob", "1123"));
+		assertTrue(am.login("bob", "123"));
+		assertTrue(am.userIsLoggedIn());
+		assertTrue(am.getLoggedInAccount().getUserName() == "bob");
+		am.loggedOut();
+		assertFalse(am.userIsLoggedIn());
+		assertTrue(am.login("alice", "bestpasswordever1234321"));
 	}
 
 }
