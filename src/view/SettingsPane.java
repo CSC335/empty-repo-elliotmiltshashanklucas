@@ -7,10 +7,12 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import model.account.Settings;
 import model.game.Card;
 import model.game.Game;
@@ -103,6 +105,9 @@ public class SettingsPane extends BorderPane implements Observer {
 		gamemode.addAll(Game.Difficulty.values());
 		gamemodeView.setItems(gamemode);
 		gamemodeView.setValue(settings.getDifficulty());
+		Tooltip tt = new Tooltip("Easy: 4 Cards/Set, Match 2\nMedium: 2 Cards/Set, Match 2\nHard: 4 Cards/Set, Match 4");
+		tt.setFont(new Font(16));
+		gamemodeView.setTooltip(tt);
 		//TODO I don't like the list of board sizes being hard coded into the view
 		// (hard to find if trying to use elsewhere)
 		boardSizes.addAll(new Tuple(2, 3), new Tuple(3, 4));
