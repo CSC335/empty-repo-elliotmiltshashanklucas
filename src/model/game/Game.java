@@ -109,17 +109,7 @@ public class Game implements Observer{
      * Starts a new game by resetting game parameters and shuffling cards.
      */
 	public void newGame() {
-		numClicked = 0;
-		matchesFound = 0;
-		totalGuesses = 0;
-		// List<String> cardIdentifiers = getCardIdentifiers(numSets);
-		cards.clear();
-		List<String> cardFaces = theme.getImageStrings(numSets);
-		for (String id : cardFaces) {
-			for (int i = 0; i < setSize; i++) {
-				cards.add(new Card(id));
-			}
-		}
+		reset();
 		shuffle();
 	}
 	
@@ -127,10 +117,16 @@ public class Game implements Observer{
 	 * Starts a new game, but does not shuffle the cards
 	 */
 	public void newTestGame() {
+		reset();
+	}
+	
+	/**
+	 * Resets game dependent variables and lays out the new card array
+	 */
+	private void reset() {
 		numClicked = 0;
 		matchesFound = 0;
 		totalGuesses = 0;
-		// List<String> cardIdentifiers = getCardIdentifiers(numSets);
 		cards.clear();
 		List<String> cardFaces = theme.getImageStrings(numSets);
 		for (String id : cardFaces) {
@@ -143,7 +139,7 @@ public class Game implements Observer{
 	/**
 	 * Shuffles the cards
 	 */
-	public void shuffle() {
+	private void shuffle() {
 		Collections.shuffle(cards);
 	}
 	

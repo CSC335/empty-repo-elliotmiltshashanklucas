@@ -7,7 +7,14 @@ import static org.junit.Assert.*;
 import model.game.*;
 import model.account.*;
 
+/**
+ * JUnit tests for the model classes
+ */
 public class ModelTests {
+	
+	/**
+	 * Tests the card class
+	 */
 	@Test
 	public void testCard() {
 		String img1 = "earth";
@@ -29,6 +36,9 @@ public class ModelTests {
 		assertFalse(c1.isFlipped());
 	}
 	
+	/**
+	 * Tests the Settings class
+	 */
 	@Test
 	public void testSettings() {
 		Settings s = new Settings(Game.Difficulty.EASY, 40, 4, "Cats");
@@ -52,6 +62,9 @@ public class ModelTests {
 		assertEquals(s2.getPrefferedTheme(), "Space");
 	}
 	
+	/**
+	 * Tests the Game class
+	 */
 	@Test
 	public void testGame() {
 		Settings s = new Settings(Game.Difficulty.MEDIUM, 3, 4, "Space");
@@ -96,6 +109,9 @@ public class ModelTests {
 		assertEquals(g.totalGuesses(), s.getColumns() * s.getRows() + 2);	
 	}
 	
+	/**
+	 * Tests the Account class
+	 */
 	@Test
 	public void testAccount() {
 		Settings s = new Settings();
@@ -113,6 +129,9 @@ public class ModelTests {
 		assertTrue(bob.getUserName() == "bob");
 	}
 	
+	/**
+	 * Tests the AccountManager class
+	 */
 	@Test
 	public void testAccountManager() {
 		AccountManager am = new AccountManager();

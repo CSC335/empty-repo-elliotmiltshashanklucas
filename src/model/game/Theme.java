@@ -208,13 +208,24 @@ public class Theme {
 		notifyListeners();
 	}
 
+	/**
+	 * @return the set of all theme names
+	 */
 	public static Set<String> getThemes() {
 		return allThemes.keySet();
 	}
+	
+	/**
+	 * @param s - the name of the desired theme
+	 * @return the theme associated with a given name
+	 */
 	public static Theme getTheme(String s) {
 		return allThemes.get(s);
 	}
 
+	/**
+	 * Sets up all starter theme objects
+	 */
 	private static void setUpThemes() {
 		File dir = new File("Images");
 		for(File folder : dir.listFiles()) {
