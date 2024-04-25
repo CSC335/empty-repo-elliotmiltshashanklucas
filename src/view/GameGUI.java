@@ -74,6 +74,7 @@ public class GameGUI extends Application {
 			System.out.println(game.getEndTime() + "\n");
 			accounts.getLoggedInAccount().addGameData(game.getGuesses(), game.getEndTime(), 
 					game.getDifficulty(), game.getNumCards());
+			stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT, accounts);
 			Platform.runLater(()->{
 				
 			all.setCenter(start);
