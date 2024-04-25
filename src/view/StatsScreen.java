@@ -60,6 +60,7 @@ public class StatsScreen extends GridPane {
 	    this.accountManager = a;
 	    initBarChart();
 	    initLineChart();
+	    compToAverage();
 	    showBest();
 	    plotRecent();
 	}
