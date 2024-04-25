@@ -72,6 +72,8 @@ public class GameGUI extends Application {
 			game.setOnGameEnd(() -> {
 				
 			System.out.println(game.getEndTime() + "\n");
+			accounts.getLoggedInAccount().addGameData(game.getGuesses(), game.getEndTime(), 
+					game.getDifficulty(), game.getNumCards());
 			Platform.runLater(()->{
 				
 			all.setCenter(start);

@@ -30,6 +30,7 @@ public class GameView extends BorderPane implements Observer {
     private long startTime;
     private Label timerLabel;
 	private Action onGameEnd = () -> {
+		
 	}; // Placeholder for end-game action
 
 	/**
@@ -137,12 +138,24 @@ public class GameView extends BorderPane implements Observer {
 	}
 
 	
-	public Long getEndTime() {
-		long now = System.nanoTime();
-		long elapsedTimeNs = now - startTime;
-        long elapsedSeconds = elapsedTimeNs / 1_000_000_000;
+	public Double getEndTime() {
+		Long now = System.nanoTime();
+		Long elapsedTimeNs = now - startTime;
+        Double elapsedSeconds = elapsedTimeNs / 1_000_000_000.0;
 
         return elapsedSeconds;
+	}
+	
+	public Integer getGuesses() {
+		return game.totalGuesses();
+	}
+	
+	public Integer getNumCards() {
+		return game.numCards();
+	}
+	
+	public Game.Difficulty getDifficulty(){
+		return game.getDifficulty();
 	}
 	/**
 	 * Updates the view to reflect the current theme settings when a theme change

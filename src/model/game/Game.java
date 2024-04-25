@@ -30,6 +30,7 @@ public class Game implements Observer{
 	private int numClicked = 0;
 	private int matchesFound = 0;
 	private int totalGuesses = 0;
+	private static Game.Difficulty g;
 	static final public int DEFAULT_COLS = 4;
 	static final public int DEFAULT_ROWS = 3;
 	
@@ -56,6 +57,7 @@ public class Game implements Observer{
 	public static Game makeGame(Settings settings) {
 		int rows = settings.getRows();
 		int cols = settings.getColumns();
+		g = settings.getDifficulty();
 		switch (settings.getDifficulty()) {
 		case EASY:
 			return new Game(rows, cols, 4, 2);
@@ -225,6 +227,14 @@ public class Game implements Observer{
 		return totalGuesses;
 	}
 
+	
+	public int numCards() {
+		return cards.size();
+	}
+	
+	public Game.Difficulty getDifficulty(){
+		return g;
+	}
 	/**
      * Retrieves the number of sets found.
      *
