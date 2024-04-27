@@ -16,6 +16,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import model.GameStats;
 import model.account.Account;
@@ -47,6 +48,8 @@ public class StatsScreen extends GridPane {
 	private Label averageHardScore;
 
 	private Label gamesPlayed;
+	
+	private ComboBox<String> selectDifficulty;
 
 	private VBox labels;
 	
@@ -58,11 +61,23 @@ public class StatsScreen extends GridPane {
 	    this.setWidth(width);
 	    this.setHeight(height);
 	    this.accountManager = a;
+	    selectDifficulty = new ComboBox<>();
+	    selectDifficulty.getItems().addAll("EASY", "MEDIUM", "HARD");
+	    selectDifficulty.setValue("EASY");
+	    this.add(selectDifficulty, 4, 1);
+	    addEventHandlers();
 	    initBarChart();
 	    initLineChart();
-	    compToAverage();
+	    compToAverage(Game.Difficulty.valueOf("EASY"));
 	    showBest();
-	    plotRecent();
+	    plotRecent(Game.Difficulty.valueOf("EASY"));
+	}
+	
+	private void addEventHandlers() {
+		selectDifficulty.setOnAction((e)->{
+			compToAverage(Game.Difficulty.valueOf(selectDifficulty.getValue()));
+			plotRecent(Game.Difficulty.valueOf(selectDifficulty.getValue()));
+		});
 	}
 
 	private void initBarChart() {
@@ -83,12 +98,12 @@ public class StatsScreen extends GridPane {
 	 * @param none
 	 * @return none
 	 */
-	public void compToAverage() {
+	public void compToAverage(Game.Difficulty d) {
 	    barChart.getData().clear();
 	    XYChart.Series<String, Number> series1 = new XYChart.Series<>();
 	    XYChart.Series<String, Number> series2 = new XYChart.Series<>();
-	    series1.getData().add(new XYChart.Data<>("You", findUserAverage(accountManager.getLoggedInAccount().getDifficulty())));
-	    series2.getData().add(new XYChart.Data<>("Them", findAverage(accountManager.getLoggedInAccount().getDifficulty())));
+	    series1.getData().add(new XYChart.Data<>("You", findUserAverage(d)));
+	    series2.getData().add(new XYChart.Data<>("Them", findAverage(d)));
 	    series1.setName("You");
 	    series2.setName("Them");
 	    barChart.getData().addAll(series1, series2);
@@ -141,67 +156,15 @@ public class StatsScreen extends GridPane {
 	 * @param none
 	 * @return none
 	 */
-	public void plotRecent() {
+	public void plotRecent(Game.Difficulty d) {
 	    lineChart.getData().clear();
 	    XYChart.Series<Number, Number> series = new XYChart.Series<>();
 	    series.setName("Player performance");
-	    List<Integer> recents = getRecent(accountManager.getLoggedInAccount().getDifficulty());
+	    List<Integer> recents = getRecent(d);
 	    for (int i = 0; i < recents.size(); i++) {
 	        series.getData().add(new XYChart.Data<>(i, recents.get(i)));
 	    }
 	    lineChart.getData().add(series);
-	}
-
-	public void refreshStats() {
-	    Account account = accountManager.getLoggedInAccount();
-	    if (account == null) 
-	    	return;  
-
-	    updateLabels(account);
-	    updateCharts(account);
-	}
-
-	private void updateLabels(Account account) {
-	    Stats easyStats = account.getStats(Game.Difficulty.EASY);
-	    Stats mediumStats = account.getStats(Game.Difficulty.MEDIUM);
-	    Stats hardStats = account.getStats(Game.Difficulty.HARD);
-
-	    bestEasyScore.setText("Best easy guesses: " + easyStats.getBestGuesses());
-	    bestMediumScore.setText("Best medium guesses: " + mediumStats.getBestGuesses());
-	    bestHardScore.setText("Best hard guesses: " + hardStats.getBestGuesses());
-	    
-	    averageEasyScore.setText("Average easy guesses: " + easyStats.getAverageGuesses());
-	    averageMediumScore.setText("Average medium guesses: " + mediumStats.getAverageGuesses());
-	    averageHardScore.setText("Average hard guesses: " + hardStats.getAverageGuesses());
-	    
-	    gamesPlayed.setText("Games played: " + (easyStats.getGamesPlayed() + mediumStats.getGamesPlayed() + hardStats.getGamesPlayed()));
-	}
-
-	private void updateCharts(Account account) {
-	    updateBarChart(account);
-	    updateLineChart(account);
-	}
-
-	private void updateBarChart(Account account) {
-	    barChart.getData().clear();
-	    XYChart.Series<String, Number> series1 = new XYChart.Series<>();
-	    XYChart.Series<String, Number> series2 = new XYChart.Series<>();
-	    series1.getData().add(new XYChart.Data<>("You", findUserAverage(account.getDifficulty())));
-	    series2.getData().add(new XYChart.Data<>("Them", findAverage(account.getDifficulty())));
-	    series1.setName("You");
-	    series2.setName("Them");
-	    barChart.getData().addAll(series1, series2);
-	}
-
-	private void updateLineChart(Account account) {
-	    lineChart.getData().clear();
-	    XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-	    series1.setName("Player performance");
-	    List<Integer> recents = getRecent(account.getDifficulty());
-	    for (int i = 0; i < recents.size(); i++) {
-	        series1.getData().add(new XYChart.Data<>(i, recents.get(i)));
-	    }
-	    lineChart.getData().add(series1);
 	}
 	
 	/**
