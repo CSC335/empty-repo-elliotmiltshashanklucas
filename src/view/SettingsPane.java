@@ -110,7 +110,7 @@ public class SettingsPane extends BorderPane implements Observer {
 		gamemodeView.setTooltip(tt);
 		//TODO I don't like the list of board sizes being hard coded into the view
 		// (hard to find if trying to use elsewhere)
-		boardSizes.addAll(new Tuple(2, 3), new Tuple(3, 4));
+		boardSizes.addAll(new Tuple(2, 4), new Tuple(3, 4), new Tuple(4,6));
 		boardSizesView.setItems(boardSizes);
 		boardSizesView.setValue(new Tuple(settings.getRows(), settings.getColumns()));
 		settingsBar.getChildren().addAll(themeView, gamemodeView, boardSizesView);
