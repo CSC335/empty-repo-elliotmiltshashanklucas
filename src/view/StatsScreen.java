@@ -80,6 +80,9 @@ public class StatsScreen extends GridPane {
 		});
 	}
 
+	/**
+	 * Creates bar chart
+	 */
 	private void initBarChart() {
 	    CategoryAxis x = new CategoryAxis();
 	    x.setLabel("Player");
@@ -139,6 +142,9 @@ public class StatsScreen extends GridPane {
 
 	}
 
+	/**
+	 * Creates line chart
+	 */
 	private void initLineChart() {
 	    NumberAxis x = new NumberAxis();
 	    NumberAxis y = new NumberAxis();

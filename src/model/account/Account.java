@@ -129,6 +129,10 @@ public class Account implements Serializable{
     	return this.gameHistory;
     }
     
+    public Game.Difficulty getDifficulty(){
+    	return this.prefferedSettings.getDifficulty();
+    }
+    
     /*
      * For testing only
      */
@@ -141,9 +145,6 @@ public class Account implements Serializable{
     {
     	Stats stats = gameHistory.computeIfAbsent(difficulty, k -> new Stats());
     	stats.addGame(numGuesses, numSeconds, numberOfCards);
-    }
-    public Game.Difficulty getDifficulty(){
-    	return this.prefferedSettings.getDifficulty();
     }
 }
 

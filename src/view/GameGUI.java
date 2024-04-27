@@ -41,11 +41,6 @@ public class GameGUI extends Application {
 		all.setMinWidth(CENTER_WIDTH + 50);
 		start = new StartScreen(CENTER_WIDTH, CENTER_HEIGHT);
 		login = new LoginScreen(accounts, primaryStage);
-		/*
-		 * need to change when this gets instantiated (account null)
-		stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT,accounts);
-		stats.getStylesheets().add("styles.css");
-		*/
 		all.setCenter(login);
 		Scene scene = new Scene(all);
 		scene.getStylesheets().add("logincss.css");
