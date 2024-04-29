@@ -5,3 +5,7 @@
 .default-color1.chart-bar{
     -fx-bar-fill: RED
 }
+.label {
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+}

@@ -34,21 +34,14 @@ import model.game.Game;
 public class StatsScreen extends GridPane {
 
 	private AccountManager accountManager;
-
 	private Label bestEasyScore;
-
 	private Label bestMediumScore;
-
 	private Label bestHardScore;
-
 	private Label averageEasyScore;
-
 	private Label averageMediumScore;
-
 	private Label averageHardScore;
-
 	private Label gamesPlayed;
-	
+
 	private ComboBox<String> selectDifficulty;
 
 	private VBox labels;
@@ -64,6 +57,7 @@ public class StatsScreen extends GridPane {
 	    selectDifficulty = new ComboBox<>();
 	    selectDifficulty.getItems().addAll("EASY", "MEDIUM", "HARD");
 	    selectDifficulty.setValue("EASY");
+
 	    this.add(selectDifficulty, 4, 1);
 	    addEventHandlers();
 	    initBarChart();
@@ -127,7 +121,6 @@ public class StatsScreen extends GridPane {
 		bestEasyScore = new Label("Best easy guesses: " + easyStats.getBestGuesses());
 		bestMediumScore = new Label("Best medium guesses: " + mediumStats.getBestGuesses());
 		bestHardScore = new Label("Best hard guesses: " + hardStats.getBestGuesses());
-		
 		averageEasyScore = new Label("Average easy guesses " + easyStats.getAverageGuesses());
 		averageMediumScore = new Label("Average medium guesses " + mediumStats.getAverageGuesses());
 		averageHardScore = new Label("Average hard guesses " + hardStats.getAverageGuesses());
@@ -136,6 +129,8 @@ public class StatsScreen extends GridPane {
 		
 		labels.getChildren().addAll(bestEasyScore, bestMediumScore, bestHardScore, averageEasyScore, averageMediumScore,
 				averageHardScore, gamesPlayed);
+		labels.getChildren().stream().map(x -> x.getStyleClass().add("stats-label"));
+		applyCss();
 		this.setConstraints(labels, 3, 2, 1, 1);
 		labels.setPadding(new Insets(50, 0, 0, 0));
 		this.getChildren().add(labels);

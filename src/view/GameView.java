@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import model.game.Game;
@@ -29,6 +30,8 @@ public class GameView extends BorderPane implements Observer {
 	private GridPane board;
     private long startTime;
     private Label timerLabel;
+    private Label numGuesses;
+	private HBox gameInfo;
 	private Action onGameEnd = () -> {
 		
 	}; // Placeholder for end-game action
@@ -89,10 +92,19 @@ public class GameView extends BorderPane implements Observer {
 		board.setHgap(10);
 		board.setVgap(10);
 		this.setCenter(board);
+		gameInfo = new HBox();
+		gameInfo.setSpacing(20);
+		Font font = new Font("monospace", 50);
 		timerLabel = new Label("00:00");
 		timerLabel.setTextFill(Color.WHITE); 
-		timerLabel.setFont(Font.font("Arial", 24));
-		setTop(timerLabel);
+		timerLabel.setFont(font);
+		numGuesses = new Label();
+		numGuesses.setFont(font);
+		numGuesses.setTextFill(Color.WHITE);
+		updateNumClicks();
+		gameInfo.getChildren().addAll(timerLabel, numGuesses);
+		
+		setTop(gameInfo);
 		board.setMinHeight(500);
 		startTimer();
 		Thread timerThread = new Thread(()->{
@@ -110,8 +122,10 @@ public class GameView extends BorderPane implements Observer {
 	private void addEventHandlers() {
 		for (Node card : board.getChildren()) {
 			card.setOnMouseClicked(e -> {
+				
 				game.guessCard(GridPane.getRowIndex((Node) e.getSource()),
 						GridPane.getColumnIndex((Node) e.getSource()));
+				updateNumClicks();
 				if (game.isGameOver()) {
 					onGameEnd.onAction();
 				}
@@ -156,6 +170,9 @@ public class GameView extends BorderPane implements Observer {
 	
 	public Game.Difficulty getDifficulty(){
 		return game.getDifficulty();
+	}
+	private void updateNumClicks() {
+		numGuesses.setText("Guesses: " + game.totalGuesses());
 	}
 	/**
 	 * Updates the view to reflect the current theme settings when a theme change
