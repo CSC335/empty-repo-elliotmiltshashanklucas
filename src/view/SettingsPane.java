@@ -32,7 +32,7 @@ public class SettingsPane extends BorderPane implements Observer {
 	private ComboBox<Game.Difficulty> gamemodeView = new ComboBox<>();
 	private ObservableList<Tuple> boardSizes = FXCollections.observableArrayList();
 	private ComboBox<Tuple> boardSizesView = new ComboBox<>();
-	private Button save = new Button("Save Changes");
+	private Button save = new Button("Save & Make New Game");
 	private Action onChange = () -> {};
 	
 	private class CardPreview extends CardView {
@@ -113,7 +113,8 @@ public class SettingsPane extends BorderPane implements Observer {
 		boardSizes.addAll(new Tuple(2, 4), new Tuple(3, 4), new Tuple(4,6));
 		boardSizesView.setItems(boardSizes);
 		boardSizesView.setValue(new Tuple(settings.getRows(), settings.getColumns()));
-		settingsBar.getChildren().addAll(themeView, gamemodeView, boardSizesView);
+		settingsBar.getChildren().addAll(themeView, gamemodeView, boardSizesView, save);
+		settingsBar.setSpacing(10);
 		setTop(settingsBar);
 		card = new CardPreview();
 		card.setOnMouseClicked(e -> {
@@ -124,7 +125,6 @@ public class SettingsPane extends BorderPane implements Observer {
 		});
 
 		setCenter(card);
-		setBottom(save);
 		update();
 		
 	}
