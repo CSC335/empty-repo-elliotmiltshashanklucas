@@ -126,6 +126,21 @@ public class LoginScreen extends BorderPane {
 				setPrompt("Invalid Credentials");
 			}
 		});
+		
+		passwordField.setOnAction(e -> {
+			String user = getUsername();
+			String pass = getPassword();
+			if (user.isEmpty() || pass.isEmpty()) {
+				setPrompt("Username and password cannot be empty.");
+				return;
+			}
+			if (accounts.login(user, pass)) {
+				setPrompt("Logged in successfully.");
+				updateUIPostLogin();
+			} else {
+				setPrompt("Invalid Credentials");
+			}
+		});
 
 		logoutButton.setOnAction(e -> {
 			if (accounts.userIsLoggedIn()) {
