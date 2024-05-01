@@ -28,6 +28,7 @@ import model.account.AccountManager;
 
 
 public class LoginScreen extends BorderPane {
+    // Declare UI components and some utility fields
 	private TextField usernameField = new TextField();
 	private PasswordField passwordField = new PasswordField();
 	private Button loginButton = new Button("Login");
@@ -44,6 +45,7 @@ public class LoginScreen extends BorderPane {
 	private Action onLogin = () -> {};
 	private String STATE_FILE = "state.ser";
 
+	// Constructor
 	public LoginScreen(AccountManager a, Stage stage) {
 		accounts = a;
 		layoutGUI(650, 560);
@@ -51,12 +53,14 @@ public class LoginScreen extends BorderPane {
 		promptLoadState();
 		setUpCloseRequestHandler(stage);
 	}
-
+	// Set up the user interface
 	private void layoutGUI(double d, double e) {
 		this.setWidth(d);
 		this.setHeight(e);
 		usernameField.setPromptText("Enter your username");
 		passwordField.setPromptText("Enter your password");
+		
+		// Organizing username and password fields along with labels
 		usernameDetails = new HBox();
 		usernameDetails.getChildren().addAll(accountNameLabel, usernameField);
 		usernameDetails.setSpacing(10);
@@ -68,6 +72,8 @@ public class LoginScreen extends BorderPane {
 		createLogin.setSpacing(10);
 		loginPanel = new VBox();
 		loginPanel.getChildren().addAll(prompt, usernameDetails, passwordDetails, createLogin);
+		
+		// Styling and alignment
 		usernameDetails.setPadding(new Insets(0, 0, 0, 300));
 		passwordDetails.setPadding(new Insets(0, 0, 0, 327));
 		createLogin.setPadding(new Insets(0, 0, 0, 395));
@@ -75,6 +81,8 @@ public class LoginScreen extends BorderPane {
 		loginPanel.setAlignment(Pos.CENTER);
 		this.setCenter(loginPanel);
 	    this.setStyle("-fx-background-color: #f0f4f7;"); 
+	    
+	 // Adding CSS classes to buttons
 	    loginButton.getStyleClass().add("login-button");
 	    createNewAccount.getStyleClass().add("create-account-button");
 

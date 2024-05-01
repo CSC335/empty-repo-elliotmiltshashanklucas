@@ -48,6 +48,9 @@ public class StatsScreen extends GridPane {
 	private Label averageMediumScore;
 	private Label averageHardScore;
 	private Label gamesPlayed;
+	private Label blankScore;
+	private VBox leaderBoardBox;
+	private Label leaders;
 
 	private ComboBox<String> selectDifficulty;
 
@@ -88,19 +91,23 @@ public class StatsScreen extends GridPane {
 	}
 	
 	private void initLeaderboardTable() {
-	    leaderboardTable = new TableView<>();  // Make sure this is the correct instance variable
+	    leaderboardTable = new TableView<>(); 
 
 	    TableColumn<Leaderboard, String> nameColumn = new TableColumn<>("Player Name");
 	    nameColumn.setCellValueFactory(new PropertyValueFactory<>("playerName"));
+	    nameColumn.setPrefWidth(190);
 
 	    TableColumn<Leaderboard, Integer> scoreColumn = new TableColumn<>("Score");
 	    scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
-
+	    scoreColumn.setPrefWidth(60);
+	    leaders = new Label("Leaderboard");
 	    leaderboardTable.getColumns().addAll(nameColumn, scoreColumn);
-
-	    this.setConstraints(leaderboardTable, 3, 4, 1, 1);
-	    this.getChildren().add(leaderboardTable);
-	    leaderboardTable.setStyle("-fx-table-cell-border-color: transparent;");
+	    leaderBoardBox = new VBox();
+	    leaderBoardBox.getChildren().addAll(leaders, leaderboardTable);
+	    leaderBoardBox.setSpacing(10);
+	    this.setConstraints(leaderBoardBox, 4, 3);
+	    this.getChildren().add(leaderBoardBox);
+	    leaderBoardBox.setStyle("-fx-table-cell-border-color: transparent;");
 	}
 	
 	private void updateLeaderboard(Game.Difficulty difficulty) {
@@ -118,7 +125,7 @@ public class StatsScreen extends GridPane {
 	    CategoryAxis x = new CategoryAxis();
 	    x.setLabel("Player");
 	    NumberAxis y = new NumberAxis();
-	    y.setLabel("Average attempts per game");
+	    y.setLabel("Average attempts");
 	    barChart = new BarChart<>(x, y);
 	    barChart.setBarGap(0);
 	    this.setConstraints(barChart, 1, 1, 2, 2);
@@ -161,14 +168,15 @@ public class StatsScreen extends GridPane {
 		averageEasyScore = new Label("Average easy guesses " + easyStats.getAverageGuesses());
 		averageMediumScore = new Label("Average medium guesses " + mediumStats.getAverageGuesses());
 		averageHardScore = new Label("Average hard guesses " + hardStats.getAverageGuesses());
+		blankScore = new Label(" ");
 		
 		gamesPlayed = new Label("Games played: " + (easyStats.getGamesPlayed() + mediumStats.getGamesPlayed() + hardStats.getGamesPlayed()));
 		
 		labels.getChildren().addAll(bestEasyScore, bestMediumScore, bestHardScore, averageEasyScore, averageMediumScore,
-				averageHardScore, gamesPlayed);
+				averageHardScore, gamesPlayed, blankScore);
 		labels.getChildren().stream().map(x -> x.getStyleClass().add("stats-label"));
 		applyCss();
-		this.setConstraints(labels, 3, 2, 1, 1);
+		this.setConstraints(labels, 4, 2);
 		labels.setPadding(new Insets(50, 0, 0, 0));
 		this.getChildren().add(labels);
 
@@ -181,7 +189,7 @@ public class StatsScreen extends GridPane {
 	    NumberAxis x = new NumberAxis();
 	    NumberAxis y = new NumberAxis();
 	    x.setLabel("Past Games");
-	    y.setLabel("Number of Attempts");
+	    y.setLabel("Attempts");
 	    lineChart = new LineChart<>(x, y);
 	    lineChart.setTitle("Recent Performance");
 	    this.setConstraints(lineChart, 1, 3, 3, 1);
