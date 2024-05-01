@@ -60,7 +60,7 @@ public class LoginScreen extends BorderPane {
 		usernameDetails.getChildren().addAll(accountNameLabel, usernameField, loginButton);
 		usernameDetails.setSpacing(10);
 		passwordDetails = new HBox();
-		passwordDetails.getChildren().addAll(passwordLabel, passwordField, logoutButton);
+		passwordDetails.getChildren().addAll(passwordLabel, passwordField);
 		passwordDetails.setSpacing(10);
 		loginPanel = new VBox();
 		loginPanel.getChildren().addAll(prompt, usernameDetails, passwordDetails, createNewAccount);
@@ -121,7 +121,7 @@ public class LoginScreen extends BorderPane {
 			}
 			if (accounts.login(user, pass)) {
 				setPrompt("Logged in successfully.");
-				updateUIPostLogin();
+				onLogin.onAction();
 			} else {
 				setPrompt("Invalid Credentials");
 			}
@@ -136,21 +136,13 @@ public class LoginScreen extends BorderPane {
 			}
 			if (accounts.login(user, pass)) {
 				setPrompt("Logged in successfully.");
-				updateUIPostLogin();
+				onLogin.onAction();
 			} else {
 				setPrompt("Invalid Credentials");
 			}
 		});
 
-		logoutButton.setOnAction(e -> {
-			if (accounts.userIsLoggedIn()) {
-				accounts.loggedOut();
-				setPrompt("Logged out successfully.");
-				updateUIPostLogout();
-			} else {
-				setPrompt("No user is currently logged in.");
-			}
-		});
+
 
 		createNewAccount.setOnAction(e -> {
 			String user = getUsername();
@@ -167,18 +159,7 @@ public class LoginScreen extends BorderPane {
 		});
 	}
 
-	private void updateUIPostLogin() {
-		loginButton.setDisable(true);
-		logoutButton.setDisable(false);
-		createNewAccount.setDisable(true);
-		onLogin.onAction();
-	}
 
-	private void updateUIPostLogout() {
-		loginButton.setDisable(false);
-		logoutButton.setDisable(true);
-		createNewAccount.setDisable(false);
-	}
 
 	private void readState() {
 		File file = new File(STATE_FILE);

@@ -30,6 +30,7 @@ public class GameGUI extends Application {
 	private Button previousPane = new Button("Close Settings");
 	private Button statsButton = new Button("Statistics");
 	private HBox topMenu;
+	private Button logOutButton;
 	
 	private final double CENTER_WIDTH = 900;
 	private final double CENTER_HEIGHT = 600;
@@ -51,8 +52,17 @@ public class GameGUI extends Application {
 	}
 	
 	private void setUpTopMenu() {
+		logOutButton = new Button("Logout");
+		logOutButton.setOnAction(e -> {
+			if(accounts.userIsLoggedIn()) {
+				accounts.loggedOut();
+				all.setCenter(login);
+				System.out.print("Logged out successfully");
+				login.setPrompt("Logged out successfully");
+			}
+		});
 		HBox topMenu = new HBox(10);
-		topMenu.getChildren().addAll(settingsButton, statsButton);
+		topMenu.getChildren().addAll(settingsButton, statsButton, logOutButton);
 		all.setTop(topMenu);
 	}
 
