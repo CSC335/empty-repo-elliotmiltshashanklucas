@@ -7,6 +7,7 @@
     -fx-background-size: cover; 
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
+    -fx-background-color: #000000;
 }
 
 
@@ -28,5 +29,23 @@
 }
 
 .button:hover {
+  -fx-background-color: #5d7079;
+}
+
+.combo-box {
+  -fx-background-color: #78909C;
+  -fx-text-fill: white;
+  -fx-border-radius: 5px;
+  -fx-background-radius: 5px;
+  -fx-padding: 10px;
+  -fx-pref-width: 200px;
+}
+
+.combo-box .list-cell {
+  -fx-text-fill: black;
+  -fx-padding: 5px;
+}
+
+.combo-box:hover {
   -fx-background-color: #5d7079;
 }
