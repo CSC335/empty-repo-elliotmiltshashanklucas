@@ -24,7 +24,6 @@ public class GameGUI extends Application {
 	private Button settingsButton = new Button("Settings");
 	private Button gameButton = new Button("Play");
 	private Button statsButton = new Button("Statistics");
-	private HBox topMenu;
 	private Button logOutButton;
 
 	
@@ -54,6 +53,7 @@ public class GameGUI extends Application {
 			if(accounts.userIsLoggedIn()) {
 				accounts.loggedOut();
 				all.setCenter(login);
+				all.setTop(null);
 				System.out.print("Logged out successfully");
 				login.setPrompt("Logged out successfully");
 			}
@@ -63,6 +63,7 @@ public class GameGUI extends Application {
 		topMenu.getChildren().addAll(gameButton, settingsButton, statsButton, logOutButton);
 		all.setTop(topMenu);
 	}
+	
 
 	private void setEventHandlers() {
 		login.setOnLogin(() -> {

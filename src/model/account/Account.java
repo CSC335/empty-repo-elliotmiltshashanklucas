@@ -10,7 +10,11 @@ import java.util.Queue;
 
 import model.game.Game;
 import model.game.Game.Difficulty;
-
+/**
+ * A serializable account class which stores user information along with stats
+ * 
+ * @author Shashank Raj Pitla
+ */
 public class Account implements Serializable{
 	private static final long serialVersionUID = 5305138822007823784L;
     private String userName;

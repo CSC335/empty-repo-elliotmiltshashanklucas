@@ -9,7 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -18,7 +21,11 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import model.GameStats;
+import model.Leaderboard;
 import model.account.Account;
 import model.account.AccountManager;
 import model.account.Account.Stats;
@@ -49,6 +56,8 @@ public class StatsScreen extends GridPane {
 	private BarChart<String, Number> barChart;
 	
 	private LineChart<Number, Number> lineChart;
+	
+	private TableView<Leaderboard> leaderboardTable;
 
 	public StatsScreen(double width, double height, AccountManager a) {
 	    this.setWidth(width);
@@ -65,15 +74,43 @@ public class StatsScreen extends GridPane {
 	    compToAverage(Game.Difficulty.valueOf("EASY"));
 	    showBest();
 	    plotRecent(Game.Difficulty.valueOf("EASY"));
+	    initLeaderboardTable();
+	    updateLeaderboard(Game.Difficulty.valueOf(selectDifficulty.getValue()));
 	}
 	
 	private void addEventHandlers() {
 		selectDifficulty.setOnAction((e)->{
-			compToAverage(Game.Difficulty.valueOf(selectDifficulty.getValue()));
-			plotRecent(Game.Difficulty.valueOf(selectDifficulty.getValue()));
+	        Game.Difficulty selectedDifficulty = Game.Difficulty.valueOf(selectDifficulty.getValue());
+			compToAverage(selectedDifficulty);
+			plotRecent(selectedDifficulty);
+			updateLeaderboard(selectedDifficulty);
 		});
 	}
+	
+	private void initLeaderboardTable() {
+	    leaderboardTable = new TableView<>();  // Make sure this is the correct instance variable
 
+	    TableColumn<Leaderboard, String> nameColumn = new TableColumn<>("Player Name");
+	    nameColumn.setCellValueFactory(new PropertyValueFactory<>("playerName"));
+
+	    TableColumn<Leaderboard, Integer> scoreColumn = new TableColumn<>("Score");
+	    scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
+
+	    leaderboardTable.getColumns().addAll(nameColumn, scoreColumn);
+
+	    this.setConstraints(leaderboardTable, 3, 4, 1, 1);
+	    this.getChildren().add(leaderboardTable);
+	    leaderboardTable.setStyle("-fx-table-cell-border-color: transparent;");
+	}
+	
+	private void updateLeaderboard(Game.Difficulty difficulty) {
+	    List<Leaderboard> leaderboardEntries = getLeaderboard(difficulty).stream()
+	        .map(e -> new Leaderboard(e.getKey(), e.getValue()))
+	        .collect(Collectors.toList());
+
+	    ObservableList<Leaderboard> data = FXCollections.observableArrayList(leaderboardEntries);
+	    leaderboardTable.setItems(data);
+	}
 	/**
 	 * Creates bar chart
 	 */
@@ -231,5 +268,17 @@ public class StatsScreen extends GridPane {
 			recentGuesses.add(0, -1);
 		}
 		return recentGuesses;
+	}
+	private List<Map.Entry<String, Integer>> getLeaderboard(Game.Difficulty difficulty){
+	    Map<String, Integer> leaderboard = new HashMap<>();
+	    for (Account account : accountManager.getAccounts().values()) {
+	        Stats stats = account.getStats(difficulty);
+	        if (stats.getGamesPlayed() > 0) {
+	            leaderboard.put(account.getUserName(), stats.getBestGuesses());
+	        }
+	    }
+	    List<Map.Entry<String, Integer>> sortedLeaderboard = new ArrayList<>(leaderboard.entrySet());
+	    sortedLeaderboard.sort(Map.Entry.comparingByValue());
+	    return sortedLeaderboard;
 	}
 }
