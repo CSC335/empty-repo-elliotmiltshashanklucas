@@ -34,14 +34,23 @@ public class SettingsPane extends BorderPane implements Observer {
 	private ComboBox<Tuple> boardSizesView = new ComboBox<>();
 	private Button save = new Button("Save & Make New Game");
 	private Action onChange = () -> {};
-	
+	  /**
+     * Inner class for previewing how a card would look with the currently selected theme.
+     */
 	private class CardPreview extends CardView {
 		public boolean showFace = false;
+		   /**
+         * Constructs a CardPreview with no initial card.
+         */
 		public CardPreview() {
 			super(null);
 			// TODO Auto-generated constructor stub
 		}
-
+        /**
+         * Updates the image shown on the card based on its flipped state and selected theme.
+         *
+         * @param isFlipped whether the card should show the face (true) or back (false)
+         */
 		protected void updateImage(boolean isFlipped) {
 			Theme selectedTheme = Theme.getTheme(themeView.getSelectionModel().getSelectedItem());
 			if(selectedTheme == null)
@@ -51,10 +60,12 @@ public class SettingsPane extends BorderPane implements Observer {
 			else
 				this.setImage(selectedTheme.getCardBack());
 		}
+		
 		protected boolean isFlipped() {
 			return showFace;
 		}
 	}
+	
 	private CardPreview card;
 	public void setOnChange(Action onChange) {
 		this.onChange = onChange;
