@@ -8,7 +8,7 @@ import model.game.Game;
 
 public class LeaderboardManager {
 
-    private AccountManager accountManager; 
+    private AccountManager accountManager;
 
     public LeaderboardManager(AccountManager accountManager) {
         this.accountManager = accountManager;

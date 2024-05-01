@@ -20,21 +20,19 @@ public class CardView extends ImageView implements Observer {
 	private Card card;
 	private Theme theme = Theme.getTheme();
 	private boolean midAnimation = false;
-	public boolean isMidAnimation() {
-		return midAnimation;
-	}
 
 	/**
 	 * Constructs a new CardView with a specified card. Sets up the image view
 	 * properties, registers as an observer to the card and theme, and initializes
 	 * the card image based on its current state.
-	 * 
+	 *
 	 * @param c the card to be displayed and observed
 	 */
 	public CardView(Card c) {
 		card = c;
-		if(c != null)
+		if (c != null) {
 			c.addListener(this);
+		}
 		this.setFitHeight(140);
 		this.setFitWidth(120);
 		updateImage(isFlipped());
@@ -43,7 +41,7 @@ public class CardView extends ImageView implements Observer {
 
 	/**
 	 * Creates a flip animation for the card view.
-	 * 
+	 *
 	 * @param angle the angle to end the rotation at
 	 * @return a configured RotateTransition object
 	 */
@@ -58,27 +56,20 @@ public class CardView extends ImageView implements Observer {
 		return rotator;
 	}
 
-	/**
-	 * Updates the image displayed by the ImageView based on whether the card is
-	 * flipped.
-	 * 
-	 * @param isFlipped true if the card is flipped (showing its face), false if
-	 *                  showing its back
-	 */
-	protected void updateImage(boolean isFlipped) {
-		if (isFlipped)
-			this.setImage(new Image(card.getImage()));
-		else
-			this.setImage(theme.getCardBack());
-	}
 	// hack to allow for subclassing wtihout providing a card
 	protected boolean isFlipped() {
 		return card.isFlipped();
 	}
+
+	public boolean isMidAnimation() {
+		return midAnimation;
+	}
+
 	/**
 	 * Called when an observed object changes. This method handles flipping
 	 * animations and updates the card's image according to the new state.
 	 */
+	@Override
 	public void update() {
 		var flipped = isFlipped();
 		theme = Theme.getTheme();
@@ -90,12 +81,28 @@ public class CardView extends ImageView implements Observer {
 			var otherFlip = createFlipAnimation(0);
 			otherFlip.setOnFinished(p -> midAnimation = false);
 			otherFlip.play();
-			
+
 		});
-		if (!isFlipped())
+		if (!isFlipped()) {
 			rotator.setDelay(Duration.millis(1000));
+		}
 		rotator.play();
 
+	}
+
+	/**
+	 * Updates the image displayed by the ImageView based on whether the card is
+	 * flipped.
+	 *
+	 * @param isFlipped true if the card is flipped (showing its face), false if
+	 *                  showing its back
+	 */
+	protected void updateImage(boolean isFlipped) {
+		if (isFlipped) {
+			this.setImage(new Image(card.getImage()));
+		} else {
+			this.setImage(theme.getCardBack());
+		}
 	}
 
 }

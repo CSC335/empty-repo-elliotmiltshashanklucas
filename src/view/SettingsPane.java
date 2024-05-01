@@ -6,15 +6,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import model.account.Settings;
-import model.game.Card;
 import model.game.Game;
 import model.game.Theme;
 
@@ -24,6 +21,61 @@ import model.game.Theme;
  */
 public class SettingsPane extends BorderPane implements Observer {
 
+	/**
+	 * Inner class for previewing how a card would look with the currently selected
+	 * theme.
+	 */
+	private class CardPreview extends CardView {
+		public boolean showFace = false;
+
+		/**
+		 * Constructs a CardPreview with no initial card.
+		 */
+		public CardPreview() {
+			super(null);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected boolean isFlipped() {
+			return showFace;
+		}
+
+		/**
+		 * Updates the image shown on the card based on its flipped state and selected
+		 * theme.
+		 *
+		 * @param isFlipped whether the card should show the face (true) or back (false)
+		 */
+		@Override
+		protected void updateImage(boolean isFlipped) {
+			Theme selectedTheme = Theme.getTheme(themeView.getSelectionModel().getSelectedItem());
+			if (selectedTheme == null) {
+				return;
+			}
+			if (isFlipped) {
+				this.setImage(selectedTheme.getAllImages().get(0));
+			} else {
+				this.setImage(selectedTheme.getCardBack());
+			}
+		}
+	}
+	private class Tuple {
+		public int rows;
+		public int cols;
+
+		public Tuple(int i, int j) {
+			// TODO Auto-generated constructor stub
+			rows = i;
+			cols = j;
+		}
+
+		@Override
+		public String toString() {
+			return rows + ", " + cols;
+		}
+
+	}
 	private Settings settings;
 	private HBox settingsBar = new HBox();
 	private ObservableList<String> themes = FXCollections.observableArrayList();
@@ -32,59 +84,14 @@ public class SettingsPane extends BorderPane implements Observer {
 	private ComboBox<Game.Difficulty> gamemodeView = new ComboBox<>();
 	private ObservableList<Tuple> boardSizes = FXCollections.observableArrayList();
 	private ComboBox<Tuple> boardSizesView = new ComboBox<>();
+
 	private Button save = new Button("Save & Make New Game");
-	private Action onChange = () -> {};
-	  /**
-     * Inner class for previewing how a card would look with the currently selected theme.
-     */
-	private class CardPreview extends CardView {
-		public boolean showFace = false;
-		   /**
-         * Constructs a CardPreview with no initial card.
-         */
-		public CardPreview() {
-			super(null);
-			// TODO Auto-generated constructor stub
-		}
-        /**
-         * Updates the image shown on the card based on its flipped state and selected theme.
-         *
-         * @param isFlipped whether the card should show the face (true) or back (false)
-         */
-		protected void updateImage(boolean isFlipped) {
-			Theme selectedTheme = Theme.getTheme(themeView.getSelectionModel().getSelectedItem());
-			if(selectedTheme == null)
-				return;
-			if (isFlipped)
-				this.setImage(selectedTheme.getAllImages().get(0));
-			else
-				this.setImage(selectedTheme.getCardBack());
-		}
-		
-		protected boolean isFlipped() {
-			return showFace;
-		}
-	}
-	
+
+	private Action onChange = () -> {
+	};
+
 	private CardPreview card;
-	public void setOnChange(Action onChange) {
-		this.onChange = onChange;
-	}
-	private class Tuple {
-		public int rows;
-		public int cols;
-		public Tuple(int i, int j) {
-			// TODO Auto-generated constructor stub
-			rows = i;
-			cols = j;
-		}
-		public String toString() {
-			return rows + ", " + cols;
-		}
-		
-	}
-	
-	
+
 	/**
 	 * Constructs a new SettingsPane. Initializes the theme selection ListView and
 	 * select button, and registers this pane as an observer of the Theme model.
@@ -97,15 +104,15 @@ public class SettingsPane extends BorderPane implements Observer {
 		setWidth(width);
 		layoutGUI();
 
-		save.setOnAction(e-> {
+		save.setOnAction(e -> {
 			settings.setPrefferedTheme(themeView.getSelectionModel().getSelectedItem());
 			settings.setDifficulty(gamemodeView.getSelectionModel().getSelectedItem());
 			Tuple dimensions = boardSizesView.getSelectionModel().getSelectedItem();
 			settings.setDimension(dimensions.rows, dimensions.cols);
 			onChange.onAction();
-		
+
 		});
-		
+
 	}
 
 	private void layoutGUI() {
@@ -116,12 +123,13 @@ public class SettingsPane extends BorderPane implements Observer {
 		gamemode.addAll(Game.Difficulty.values());
 		gamemodeView.setItems(gamemode);
 		gamemodeView.setValue(settings.getDifficulty());
-		Tooltip tt = new Tooltip("Easy: 4 Cards/Set, Match 2\nMedium: 2 Cards/Set, Match 2\nHard: 4 Cards/Set, Match 4");
+		Tooltip tt = new Tooltip(
+				"Easy: 4 Cards/Set, Match 2\nMedium: 2 Cards/Set, Match 2\nHard: 4 Cards/Set, Match 4");
 		tt.setFont(new Font(16));
 		gamemodeView.setTooltip(tt);
-		//TODO I don't like the list of board sizes being hard coded into the view
+		// TODO I don't like the list of board sizes being hard coded into the view
 		// (hard to find if trying to use elsewhere)
-		boardSizes.addAll(new Tuple(2, 4), new Tuple(3, 4), new Tuple(4,6));
+		boardSizes.addAll(new Tuple(2, 4), new Tuple(3, 4), new Tuple(4, 6));
 		boardSizesView.setItems(boardSizes);
 		boardSizesView.setValue(new Tuple(settings.getRows(), settings.getColumns()));
 		settingsBar.getChildren().addAll(themeView, gamemodeView, boardSizesView, save);
@@ -129,15 +137,21 @@ public class SettingsPane extends BorderPane implements Observer {
 		setTop(settingsBar);
 		card = new CardPreview();
 		card.setOnMouseClicked(e -> {
-			if(card.isMidAnimation()) return;
-			
+			if (card.isMidAnimation()) {
+				return;
+			}
+
 			card.showFace = !card.showFace;
 			card.update();
 		});
 
 		setCenter(card);
 		update();
-		
+
+	}
+
+	public void setOnChange(Action onChange) {
+		this.onChange = onChange;
 	}
 
 	/**

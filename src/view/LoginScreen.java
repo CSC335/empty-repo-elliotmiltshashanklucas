@@ -26,7 +26,6 @@ import javafx.stage.Stage;
 import model.account.Account;
 import model.account.AccountManager;
 
-
 public class LoginScreen extends BorderPane {
     // Declare UI components and some utility fields
 	private TextField usernameField = new TextField();
@@ -42,7 +41,8 @@ public class LoginScreen extends BorderPane {
 	private HBox createLogin;
 	private VBox loginPanel;
 	private AccountManager accounts;
-	private Action onLogin = () -> {};
+	private Action onLogin = () -> {
+	};
 	private String STATE_FILE = "state.ser";
 
 	// Constructor
@@ -53,13 +53,37 @@ public class LoginScreen extends BorderPane {
 		promptLoadState();
 		setUpCloseRequestHandler(stage);
 	}
+	public Account getCurrentUser() {
+		return accounts.getLoggedInAccount();
+	}
+
+	public Button getLoginButton() {
+		return loginButton;
+	}
+
+	public Button getLogoutButton() {
+		return logoutButton;
+	}
+
+	public String getPassword() {
+		return passwordField.getText();
+	}
+
+	public String getUsername() {
+		return usernameField.getText();
+	}
+
+	public boolean isLoggedIn() {
+		return accounts.userIsLoggedIn();
+	}
+
 	// Set up the user interface
 	private void layoutGUI(double d, double e) {
 		this.setWidth(d);
 		this.setHeight(e);
 		usernameField.setPromptText("Enter your username");
 		passwordField.setPromptText("Enter your password");
-		
+
 		// Organizing username and password fields along with labels
 		usernameDetails = new HBox();
 		usernameDetails.getChildren().addAll(accountNameLabel, usernameField);
@@ -72,7 +96,7 @@ public class LoginScreen extends BorderPane {
 		createLogin.setSpacing(10);
 		loginPanel = new VBox();
 		loginPanel.getChildren().addAll(prompt, usernameDetails, passwordDetails, createLogin);
-		
+
 		// Styling and alignment
 		usernameDetails.setPadding(new Insets(0, 0, 0, 300));
 		passwordDetails.setPadding(new Insets(0, 0, 0, 327));
@@ -80,12 +104,11 @@ public class LoginScreen extends BorderPane {
 		loginPanel.setSpacing(10);
 		loginPanel.setAlignment(Pos.CENTER);
 		this.setCenter(loginPanel);
-	    this.setStyle("-fx-background-color: #f0f4f7;"); 
-	    
+	    this.setStyle("-fx-background-color: #f0f4f7;");
+
 	 // Adding CSS classes to buttons
 	    loginButton.getStyleClass().add("login-button");
 	    createNewAccount.getStyleClass().add("create-account-button");
-
 	}
 
 	/**
@@ -95,7 +118,6 @@ public class LoginScreen extends BorderPane {
 	 * @return none
 	 */
 
-
 	private void promptLoadState() {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setHeaderText("Load Saved State");
@@ -104,6 +126,78 @@ public class LoginScreen extends BorderPane {
 		if (result.isPresent() && result.get() == ButtonType.OK) {
 			readState();
 		}
+	}
+
+	private void readState() {
+		File file = new File(STATE_FILE);
+		if (!file.exists()) {
+			System.out.println("No saved state file found. Starting with a new state.");
+			return;
+		}
+
+		try (FileInputStream rawBytes = new FileInputStream(file);
+				ObjectInputStream inFile = new ObjectInputStream(rawBytes)) {
+
+			HashMap<String, Account> fileAccounts = (HashMap<String, Account>) inFile.readObject();
+			accounts.getAccounts().putAll(fileAccounts);
+
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void setEventHandlers() {
+		loginButton.setOnAction(e -> {
+			String user = getUsername();
+			String pass = getPassword();
+			if (user.isEmpty() || pass.isEmpty()) {
+				setPrompt("Username and password cannot be empty.");
+				return;
+			}
+			if (accounts.login(user, pass)) {
+				setPrompt("Logged in successfully.");
+				onLogin.onAction();
+			} else {
+				setPrompt("Invalid Credentials");
+			}
+		});
+
+		passwordField.setOnAction(e -> {
+			String user = getUsername();
+			String pass = getPassword();
+			if (user.isEmpty() || pass.isEmpty()) {
+				setPrompt("Username and password cannot be empty.");
+				return;
+			}
+			if (accounts.login(user, pass)) {
+				setPrompt("Logged in successfully.");
+				onLogin.onAction();
+			} else {
+				setPrompt("Invalid Credentials");
+			}
+		});
+
+		createNewAccount.setOnAction(e -> {
+			String user = getUsername();
+			String pass = getPassword();
+			if (user.isEmpty() || pass.isEmpty()) {
+				setPrompt("Username and password cannot be empty.");
+				return;
+			}
+			if (accounts.createAccount(user, pass)) {
+				setPrompt("Account created, please login.");
+			} else {
+				setPrompt("Account name already taken");
+			}
+		});
+	}
+
+	public void setOnLogin(Action loginAction) {
+		this.onLogin = loginAction;
+	}
+
+	public void setPrompt(String s) {
+		prompt.setText(s);
 	}
 
 	private void setUpCloseRequestHandler(Stage stage) {
@@ -124,74 +218,6 @@ public class LoginScreen extends BorderPane {
 		});
 	}
 
-	private void setEventHandlers() {
-		loginButton.setOnAction(e -> {
-			String user = getUsername();
-			String pass = getPassword();
-			if (user.isEmpty() || pass.isEmpty()) {
-				setPrompt("Username and password cannot be empty.");
-				return;
-			}
-			if (accounts.login(user, pass)) {
-				setPrompt("Logged in successfully.");
-				onLogin.onAction();
-			} else {
-				setPrompt("Invalid Credentials");
-			}
-		});
-		
-		passwordField.setOnAction(e -> {
-			String user = getUsername();
-			String pass = getPassword();
-			if (user.isEmpty() || pass.isEmpty()) {
-				setPrompt("Username and password cannot be empty.");
-				return;
-			}
-			if (accounts.login(user, pass)) {
-				setPrompt("Logged in successfully.");
-				onLogin.onAction();
-			} else {
-				setPrompt("Invalid Credentials");
-			}
-		});
-
-
-
-		createNewAccount.setOnAction(e -> {
-			String user = getUsername();
-			String pass = getPassword();
-			if (user.isEmpty() || pass.isEmpty()) {
-				setPrompt("Username and password cannot be empty.");
-				return;
-			}
-			if (accounts.createAccount(user, pass)) {
-				setPrompt("Account created, please login.");
-			} else {
-				setPrompt("Account name already taken");
-			}
-		});
-	}
-
-
-
-	private void readState() {
-		File file = new File(STATE_FILE);
-		if (!file.exists()) {
-			System.out.println("No saved state file found. Starting with a new state.");
-			return;
-		}
-
-		try (FileInputStream rawBytes = new FileInputStream(file);
-				ObjectInputStream inFile = new ObjectInputStream(rawBytes)) {
-
-			HashMap<String, Account> fileAccounts = (HashMap<String, Account>) inFile.readObject();
-			accounts.getAccounts().putAll(fileAccounts);
-
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void writeState() {
 		HashMap<String, Account> acc = accounts.getAccounts();
 		try {
@@ -204,38 +230,4 @@ public class LoginScreen extends BorderPane {
 		}
 	}
 
-	public Button getLoginButton() {
-		return loginButton;
-	}
-
-	public Button getLogoutButton() {
-		return logoutButton;
-	}
-
-	public String getUsername() {
-		return usernameField.getText();
-	}
-
-	public String getPassword() {
-		return passwordField.getText();
-	}
-
-	public void setPrompt(String s) {
-		prompt.setText(s);
-	}
-
-	public boolean isLoggedIn() {
-		return accounts.userIsLoggedIn();
-	}
-
-	public Account getCurrentUser() {
-		return accounts.getLoggedInAccount();
-	}
-	
-	public void setOnLogin(Action loginAction) {
-		this.onLogin = loginAction;
-	}
-
-
 }
-

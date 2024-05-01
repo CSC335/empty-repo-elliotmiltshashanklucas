@@ -12,6 +12,9 @@ import model.game.Game;
 import model.game.Theme;
 
 public class GameGUI extends Application {
+	public static void main(String[] args) {
+		launch(args);
+	}
 	private BorderPane all;
 	private StartScreen start;
 	private LoginScreen login;
@@ -24,12 +27,70 @@ public class GameGUI extends Application {
 	private Button settingsButton = new Button("Settings");
 	private Button gameButton = new Button("Play");
 	private Button statsButton = new Button("Statistics");
-	private Button logOutButton;
 
-	
+	private Button logOutButton;
 	private final double CENTER_WIDTH = 900;
+
 	private final double CENTER_HEIGHT = 600;
 
+	private void setEventHandlers() {
+		login.setOnLogin(() -> {
+			all.setCenter(start);
+			settings = accounts.getLoggedInAccount().getPrefferedSettings();
+			Theme.setTheme(settings.getPrefferedTheme());
+			game = new GameView(Game.makeGame(settings));
+			stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT, accounts);
+			stats.getStylesheets().add("styles.css");
+			game.setOnGameEnd(() -> {
+				endGameScreen.updateGameSummary(game.getGuesses(), game.getEndTime());
+				gameButton.setOnAction(e -> all.setCenter(start));
+				accounts.getLoggedInAccount().addGameData(game.getGuesses(), game.getEndTime(), game.getDifficulty(),
+						game.getNumCards());
+				stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT, accounts);
+
+				all.setCenter(endGameScreen);
+			});
+			settingsView = new SettingsPane(CENTER_WIDTH, CENTER_HEIGHT, settings);
+			settingsView.setOnChange(() -> {
+				game.newGame(Game.makeGame(settings));
+				System.out.println(accounts.getLoggedInAccount().getPrefferedSettings().getDifficulty());
+				gameButton.setOnAction(e -> all.setCenter(start));
+			});
+			setUpTopMenu();
+		});
+
+		settingsButton.setOnAction(e -> all.setCenter(settingsView));
+		statsButton.setOnAction(e -> all.setCenter(stats));
+		gameButton.setOnAction(e -> all.setCenter(start));
+
+		start.setOnClickPlay(() -> {
+			all.setCenter(game);
+			game.newGame(Game.makeGame(settings));
+			gameButton.setOnAction(e -> all.setCenter(game));
+			accounts.getLoggedInAccount().setPrefferedSettings(settings);
+		});
+
+	}
+
+
+	private void setUpTopMenu() {
+		logOutButton = new Button("Logout");
+		logOutButton.setOnAction(e -> {
+			if (accounts.userIsLoggedIn()) {
+				accounts.loggedOut();
+				all.setCenter(login);
+				all.setTop(null);
+				System.out.print("Logged out successfully");
+				login.setPrompt("Logged out successfully");
+			}
+		});
+		HBox topMenu = new HBox(10);
+
+		topMenu.getChildren().addAll(gameButton, settingsButton, statsButton, logOutButton);
+		all.setTop(topMenu);
+	}
+
+	@Override
 	public void start(Stage primaryStage) throws Exception {
 		accounts = new AccountManager();
 		all = new BorderPane();
@@ -45,66 +106,5 @@ public class GameGUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		setEventHandlers();
-	}
-	
-	private void setUpTopMenu() {
-		logOutButton = new Button("Logout");
-		logOutButton.setOnAction(e -> {
-			if(accounts.userIsLoggedIn()) {
-				accounts.loggedOut();
-				all.setCenter(login);
-				all.setTop(null);
-				System.out.print("Logged out successfully");
-				login.setPrompt("Logged out successfully");
-			}
-		});
-		HBox topMenu = new HBox(10);
-
-		topMenu.getChildren().addAll(gameButton, settingsButton, statsButton, logOutButton);
-		all.setTop(topMenu);
-	}
-	
-
-	private void setEventHandlers() {
-		login.setOnLogin(() -> {
-			all.setCenter(start);
-			settings = accounts.getLoggedInAccount().getPrefferedSettings();
-			Theme.setTheme(settings.getPrefferedTheme());
-			game = new GameView(Game.makeGame(settings));
-			stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT, accounts);
-			stats.getStylesheets().add("styles.css");
-			game.setOnGameEnd(() -> {
-				endGameScreen.updateGameSummary(game.getGuesses(), game.getEndTime());
-				gameButton.setOnAction(e -> all.setCenter(start));
-				accounts.getLoggedInAccount().addGameData(game.getGuesses(), game.getEndTime(), 
-				game.getDifficulty(), game.getNumCards());
-				stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT, accounts);
-
-				all.setCenter(endGameScreen);
-			});
-			settingsView = new SettingsPane(CENTER_WIDTH, CENTER_HEIGHT, settings);
-			settingsView.setOnChange(() -> {
-				game.newGame(Game.makeGame(settings));
-				System.out.println(accounts.getLoggedInAccount().getPrefferedSettings().getDifficulty());
-				gameButton.setOnAction(e -> all.setCenter(start));
-				});
-			setUpTopMenu();
-		});
-		
-		settingsButton.setOnAction(e -> all.setCenter(settingsView));
-		statsButton.setOnAction(e -> all.setCenter(stats));
-		gameButton.setOnAction(e -> all.setCenter(start));
-
-		start.setOnClickPlay(() -> {
-			all.setCenter(game);
-			game.newGame(Game.makeGame(settings));
-			gameButton.setOnAction(e -> all.setCenter(game));
-			accounts.getLoggedInAccount().setPrefferedSettings(settings);
-		});
-
-	}
-
-	public static void main(String[] args) {
-		launch(args);
 	}
 }

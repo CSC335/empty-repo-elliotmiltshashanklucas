@@ -7,34 +7,33 @@ import javafx.stage.Stage;
 import model.account.Account;
 import model.account.AccountManager;
 import model.game.Game;
-import model.game.Game.Difficulty;
 
 public class accountStatsTest extends Application {
 	AccountManager am;
-	
+
 	private StatsScreen stats;
-	
+
 	private BorderPane all;
-	
+
 	public void addData() {
-	am.createAccount("a", "1");
-	am.createAccount("b", "2");
-	am.login("a", "1");
-	Account a = am.getLoggedInAccount();
-	a.makeHistory();
-	a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
-	a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
-	a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
-	a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
-	a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
-	a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
-	am.loggedOut();
-	am.login("b", "2");
-	Account b = am.getLoggedInAccount();
-	b.makeHistory();
-	b.addGameData(20, 23, Game.Difficulty.MEDIUM, 12);
-	b.addGameData(12, 23, Game.Difficulty.MEDIUM, 12);
-	
+		am.createAccount("a", "1");
+		am.createAccount("b", "2");
+		am.login("a", "1");
+		Account a = am.getLoggedInAccount();
+		a.makeHistory();
+		a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
+		a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
+		a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
+		a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
+		a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
+		a.addGameData(24, 23, Game.Difficulty.MEDIUM, 12);
+		am.loggedOut();
+		am.login("b", "2");
+		Account b = am.getLoggedInAccount();
+		b.makeHistory();
+		b.addGameData(20, 23, Game.Difficulty.MEDIUM, 12);
+		b.addGameData(12, 23, Game.Difficulty.MEDIUM, 12);
+
 	}
 
 	@Override
@@ -47,7 +46,7 @@ public class accountStatsTest extends Application {
 		Scene scene = new Scene(all);
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		
+
 	}
-	
+
 }

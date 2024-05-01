@@ -1,8 +1,8 @@
 package model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +16,7 @@ import model.game.Theme;
 
 /*
  * author: Shashank Raj Pitla
- * This class tests all the methods implemented in Game class 
+ * This class tests all the methods implemented in Game class
  */
 public class GameTest {
 
@@ -49,6 +49,11 @@ public class GameTest {
 	private TestTheme testTheme;
 	List<Card> testCards = new ArrayList<>();
 
+	private void assertTrue(Card flipCard) {
+		// TODO Auto-generated method stub
+
+	}
+
 	@Before
 	public void setUp() {
 		testTheme = new TestTheme("a");
@@ -63,6 +68,11 @@ public class GameTest {
 		assertNotNull(game);
 		assertEquals(0, game.getNumSetsFound());
 	}
+
+	/*
+	 * Testing for matching card logic in guess card which is important to see if
+	 * the cards are a match by comparing the strings of their images
+	 */
 
 	/*
 	 * Testing for the cards present in GuessCard method which is responsible for
@@ -81,11 +91,6 @@ public class GameTest {
 
 	}
 
-	/*
-	 * Testing for matching card logic in guess card which is important to see if
-	 * the cards are a match by comparing the strings of their images
-	 */
-
 	@Test
 	public void testGuessCard1() {
 		Game game = new GameTestable(4, 3, 2, 2, testTheme);
@@ -100,11 +105,6 @@ public class GameTest {
 		game.guessCard(0, 2); // This should be guessing "match2"
 		assertTrue(game.flipCard(2));
 		assertEquals(Game.state.NOT_A_MATCH, game.guessCard(0, 3)); // This should be guessing "match3"
-	}
-
-	private void assertTrue(Card flipCard) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
