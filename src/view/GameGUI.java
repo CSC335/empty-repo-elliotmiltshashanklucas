@@ -1,12 +1,7 @@
 package view;
 
-import java.util.ArrayList;
-
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -17,7 +12,6 @@ import model.game.Game;
 import model.game.Theme;
 
 public class GameGUI extends Application {
-	private Canvas canvas;
 	private BorderPane all;
 	private StartScreen start;
 	private LoginScreen login;
@@ -26,11 +20,13 @@ public class GameGUI extends Application {
 	private Settings settings;
 	private SettingsPane settingsView;
 	private AccountManager accounts;
+	private EndGameScreen endGameScreen;
 	private Button settingsButton = new Button("Settings");
-	private Button previousPane = new Button("Close Settings");
+	private Button gameButton = new Button("Play");
 	private Button statsButton = new Button("Statistics");
 	private HBox topMenu;
 	private Button logOutButton;
+
 	
 	private final double CENTER_WIDTH = 900;
 	private final double CENTER_HEIGHT = 600;
@@ -42,6 +38,7 @@ public class GameGUI extends Application {
 		all.setMinWidth(CENTER_WIDTH + 50);
 		start = new StartScreen(CENTER_WIDTH, CENTER_HEIGHT);
 		login = new LoginScreen(accounts, primaryStage);
+		endGameScreen = new EndGameScreen(CENTER_WIDTH, CENTER_HEIGHT);
 		all.setCenter(login);
 		Scene scene = new Scene(all);
 		scene.getStylesheets().add("logincss.css");
@@ -62,7 +59,8 @@ public class GameGUI extends Application {
 			}
 		});
 		HBox topMenu = new HBox(10);
-		topMenu.getChildren().addAll(settingsButton, statsButton, logOutButton);
+
+		topMenu.getChildren().addAll(gameButton, settingsButton, statsButton, logOutButton);
 		all.setTop(topMenu);
 	}
 
@@ -75,53 +73,31 @@ public class GameGUI extends Application {
 			stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT, accounts);
 			stats.getStylesheets().add("styles.css");
 			game.setOnGameEnd(() -> {
-				
-			System.out.println(game.getEndTime() + "\n");
-			accounts.getLoggedInAccount().addGameData(game.getGuesses(), game.getEndTime(), 
-					game.getDifficulty(), game.getNumCards());
-			stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT, accounts);
-			Platform.runLater(()->{
-				
-			all.setCenter(start);
-			});
+				endGameScreen.updateGameSummary(game.getGuesses(), game.getEndTime());
+				gameButton.setOnAction(e -> all.setCenter(start));
+				accounts.getLoggedInAccount().addGameData(game.getGuesses(), game.getEndTime(), 
+				game.getDifficulty(), game.getNumCards());
+				stats = new StatsScreen(CENTER_WIDTH, CENTER_HEIGHT, accounts);
+
+				all.setCenter(endGameScreen);
 			});
 			settingsView = new SettingsPane(CENTER_WIDTH, CENTER_HEIGHT, settings);
 			settingsView.setOnChange(() -> {
 				game.newGame(Game.makeGame(settings));
 				System.out.println(accounts.getLoggedInAccount().getPrefferedSettings().getDifficulty());
-				
+				gameButton.setOnAction(e -> all.setCenter(start));
 				});
 			setUpTopMenu();
 		});
 		
-		settingsButton.setOnAction(e -> {
-			Node currentCenter = all.getCenter();
-			all.setTop(previousPane);
-			if (!(currentCenter.equals(settingsView))) {
-				previousPane.setOnAction(event -> {
-					setUpTopMenu();
-					all.setCenter(currentCenter);
-				});
-			}
-			all.setCenter(settingsView);
-		});
-		
-		statsButton.setOnAction(e -> {
-			Node currentCenter = all.getCenter();
-			all.setTop(previousPane);
-			if (!(currentCenter.equals(stats))) {
-				previousPane.setOnAction(event -> {
-					setUpTopMenu();
-					all.setCenter(currentCenter);
-				});
-			}
-			all.setCenter(stats);
-		});
-
+		settingsButton.setOnAction(e -> all.setCenter(settingsView));
+		statsButton.setOnAction(e -> all.setCenter(stats));
+		gameButton.setOnAction(e -> all.setCenter(start));
 
 		start.setOnClickPlay(() -> {
 			all.setCenter(game);
 			game.newGame(Game.makeGame(settings));
+			gameButton.setOnAction(e -> all.setCenter(game));
 			accounts.getLoggedInAccount().setPrefferedSettings(settings);
 		});
 
