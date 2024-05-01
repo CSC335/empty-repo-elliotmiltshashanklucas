@@ -29,12 +29,10 @@ public class GameView extends BorderPane implements Observer {
 	private Theme theme;
 	private GridPane board;
     private long startTime;
-    private Label timerLabel;
+	private Label timerLabel;
     private Label numGuesses;
 	private HBox gameInfo;
-	private Action onGameEnd = () -> {
-		
-	}; // Placeholder for end-game action
+	private Action onGameEnd = () -> {}; // Placeholder for end-game action
 
 	/**
 	 * Constructs a new GameView with a specified game model. Initializes the game
@@ -76,6 +74,7 @@ public class GameView extends BorderPane implements Observer {
 					return;
 				}
 			}
+			
 			onAction.onAction();
 			
 			};
