@@ -117,7 +117,9 @@ public class GameView extends BorderPane implements Observer {
 	}});
 		timerThread.start();
 	}
-
+	   /**
+     * Adds mouse click event handlers to each card in the game board.
+     */
 	private void addEventHandlers() {
 		for (Node card : board.getChildren()) {
 			card.setOnMouseClicked(e -> {
@@ -131,12 +133,16 @@ public class GameView extends BorderPane implements Observer {
 			});
 		}
 	}
-	
+    /**
+     * Starts the game timer by recording the start time.
+     */
 	private void startTimer() {
         startTime = System.nanoTime();
     
 	}
-
+	  /**
+     * Updates the timer label with the elapsed time since the game started.
+     */
 	private void updateTimer() {
             long now = System.nanoTime();
                 long elapsedTimeNs = now - startTime;
@@ -173,10 +179,8 @@ public class GameView extends BorderPane implements Observer {
 	private void updateNumClicks() {
 		numGuesses.setText("Guesses: " + game.totalGuesses());
 	}
-	/**
-	 * Updates the view to reflect the current theme settings when a theme change
-	 * occurs.
-	 */
+
+	
 	@Override
 	public void update() {
 		theme = Theme.getTheme();
